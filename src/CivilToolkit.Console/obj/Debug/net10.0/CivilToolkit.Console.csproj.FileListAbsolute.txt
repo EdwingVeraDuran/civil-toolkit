@@ -1,0 +1,14 @@
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Console
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Console.deps.json
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Console.runtimeconfig.json
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Console.dll
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Console.pdb
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.GeneratedMSBuildEditorConfig.editorconfig
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.AssemblyInfoInputs.cache
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.AssemblyInfo.cs
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.csproj.CoreCompileInputs.cache
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.dll
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/refint/CivilToolkit.Console.dll
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.pdb
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.genruntimeconfig.cache
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/ref/CivilToolkit.Console.dll
