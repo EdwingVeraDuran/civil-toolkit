@@ -10,7 +10,7 @@ public class BaseResult<T>
 
     public T? Data { get; set; }
 
-    public string? error { get; set; }
+    public string? Error { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

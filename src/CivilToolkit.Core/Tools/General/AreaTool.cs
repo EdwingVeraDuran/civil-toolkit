@@ -4,32 +4,40 @@ using CivilToolkit.Core.Models;
 
 namespace CivilToolkit.Core.Tools;
 
-public class AreaTool : Tool<AreaCalculationInputDto, AreaCalculationResultDto>
+public class AreaTool : Tool<AreaInputDto, AreaOutputDto>
 {
     public AreaTool()
         : base("area", "Area Calculator", "Calculates area", ToolCategory.General, "1.0") { }
 
-    public override bool Validate(AreaCalculationInputDto inputData)
+    public override bool Validate(AreaInputDto inputData)
     {
-      return inputData is not null;
+        return inputData is not null;
     }
 
-    public override BaseResult<AreaCalculationResultDto> Calculate(
-        AreaCalculationInputDto inputData
-    )
+    public override BaseResult<AreaOutputDto> Calculate(AreaInputDto input)
     {
-      try
-      {
-          Validate(inputData);
+        try
+        {
+            Validate(input);
 
-          float area = inputData.height * inputData * inputData.width
+            double area = input.CalculateArea();
 
-
-      }
-      catch (System.Exception)
-      {
-          
-          throw;
-      }
+            return new BaseResult<AreaOutputDto>
+            {
+                Status = ResultStatus.Ok,
+                ToolName = Name,
+                Data = new AreaOutputDto { Area = area },
+            };
+        }
+        catch (System.Exception e)
+        {
+            return new BaseResult<AreaOutputDto>
+            {
+                Status = ResultStatus.Error,
+                ToolName = Name,
+                Error = e.ToString(),
+            };
+            throw;
+        }
     }
 }

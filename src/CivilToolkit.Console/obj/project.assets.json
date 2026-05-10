@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net10.0": {}
+    "net10.0": {
+      "CivilToolkit.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/CivilToolkit.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CivilToolkit.Core.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "CivilToolkit.Core/1.0.0": {
+      "type": "project",
+      "path": "../CivilToolkit.Core/CivilToolkit.Core.csproj",
+      "msbuildProject": "../CivilToolkit.Core/CivilToolkit.Core.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net10.0": []
+    "net10.0": [
+      "CivilToolkit.Core >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "/home/edwing/.nuget/packages/": {}
@@ -32,7 +51,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Core/CivilToolkit.Core.csproj": {
+              "projectPath": "/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Core/CivilToolkit.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

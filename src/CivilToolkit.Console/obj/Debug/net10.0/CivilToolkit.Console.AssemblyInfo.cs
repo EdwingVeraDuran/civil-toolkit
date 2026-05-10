@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CivilToolkit.Console")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a4ef5ac4806bfe51916e6bfc9d39a3781109ca2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41caaf760d5327741bea2a02dbb72c66bd751dd3")]
 [assembly: System.Reflection.AssemblyProductAttribute("CivilToolkit.Console")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CivilToolkit.Console")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

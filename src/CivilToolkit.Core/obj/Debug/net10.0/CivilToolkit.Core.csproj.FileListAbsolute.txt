@@ -9,3 +9,4 @@
 /home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Core/obj/Debug/net10.0/refint/CivilToolkit.Core.dll
 /home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Core/obj/Debug/net10.0/CivilToolkit.Core.pdb
 /home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Core/obj/Debug/net10.0/ref/CivilToolkit.Core.dll
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Core/obj/Debug/net10.0/CivilToolkit.Core.sourcelink.json

@@ -12,3 +12,8 @@
 /home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.pdb
 /home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.genruntimeconfig.cache
 /home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/ref/CivilToolkit.Console.dll
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.sourcelink.json
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Core.dll
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/bin/Debug/net10.0/CivilToolkit.Core.pdb
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToolkit.Console.csproj.AssemblyReference.cache
+/home/edwing/Documents/Projects/dotnet/civil-toolkit/src/CivilToolkit.Console/obj/Debug/net10.0/CivilToo.691D3B3B.Up2Date
