@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "CivilToolkit.Console/1.0.0": {
+        "dependencies": {
+          "CivilToolkit.Core": "1.0.0"
+        },
+        "runtime": {
+          "CivilToolkit.Console.dll": {}
+        }
+      },
+      "CivilToolkit.Core/1.0.0": {
+        "runtime": {
+          "CivilToolkit.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CivilToolkit.Console/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CivilToolkit.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

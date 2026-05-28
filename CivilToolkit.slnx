@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CivilToolkit.Console/CivilToolkit.Console.csproj" />
+    <Project Path="src/CivilToolkit.Core/CivilToolkit.Core.csproj" />
+  </Folder>
+</Solution>
