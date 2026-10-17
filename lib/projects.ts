@@ -57,3 +57,45 @@ export async function createProject(input: CreateProjectInput): Promise<{ projec
 
   return { project: data }
 }
+
+type UpdateProjectInput = {
+  name?: string
+  client_name?: string
+  description?: string | null
+  location?: string | null
+  status?: ProjectStatus
+  start_date?: string | null
+  estimated_end_date?: string | null
+}
+
+export async function updateProject(
+  id: string,
+  input: UpdateProjectInput
+): Promise<{ project?: Project; error?: string }> {
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from("projects")
+    .update(input)
+    .eq("id", id)
+    .select()
+    .single()
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { project: data }
+}
+
+export async function deleteProject(id: string): Promise<{ error?: string }> {
+  const supabase = createClient()
+
+  const { error } = await supabase.from("projects").delete().eq("id", id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return {}
+}

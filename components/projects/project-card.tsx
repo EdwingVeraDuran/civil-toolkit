@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { CalendarDays, MapPin, User } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -28,45 +29,47 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="gap-4 transition-shadow hover:shadow-md">
-      <CardHeader className="pb-0">
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-base leading-tight">{project.name}</CardTitle>
-          <Badge
-            variant="secondary"
-            className={cn("shrink-0", STATUS_COLORS[project.status])}
-          >
-            {PROJECT_STATUS_LABELS[project.status]}
-          </Badge>
-        </div>
-        <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-          <User className="size-3.5" />
-          {project.client_name}
-        </p>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2 pt-0">
-        {project.location && (
+    <Link href={`/proyectos/${project.id}`} className="block">
+      <Card className="gap-4 transition-shadow hover:shadow-md">
+        <CardHeader className="pb-0">
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle className="text-base leading-tight">{project.name}</CardTitle>
+            <Badge
+              variant="secondary"
+              className={cn("shrink-0", STATUS_COLORS[project.status])}
+            >
+              {PROJECT_STATUS_LABELS[project.status]}
+            </Badge>
+          </div>
           <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="size-3.5" />
-            {project.location}
+            <User className="size-3.5" />
+            {project.client_name}
           </p>
-        )}
-        {(project.start_date || project.estimated_end_date) && (
-          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <CalendarDays className="size-3.5" />
-            {project.start_date && project.estimated_end_date
-              ? `${formatDate(project.start_date)} – ${formatDate(project.estimated_end_date)}`
-              : project.start_date
-                ? `Desde ${formatDate(project.start_date)}`
-                : `Hasta ${formatDate(project.estimated_end_date!)}`}
-          </p>
-        )}
-        {project.description && (
-          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-            {project.description}
-          </p>
-        )}
-      </CardContent>
-    </Card>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2 pt-0">
+          {project.location && (
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <MapPin className="size-3.5" />
+              {project.location}
+            </p>
+          )}
+          {(project.start_date || project.estimated_end_date) && (
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <CalendarDays className="size-3.5" />
+              {project.start_date && project.estimated_end_date
+                ? `${formatDate(project.start_date)} – ${formatDate(project.estimated_end_date)}`
+                : project.start_date
+                  ? `Desde ${formatDate(project.start_date)}`
+                  : `Hasta ${formatDate(project.estimated_end_date!)}`}
+            </p>
+          )}
+          {project.description && (
+            <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+              {project.description}
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
