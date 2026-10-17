@@ -3,11 +3,13 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import {
+  Calculator,
   ChevronRight,
   CircleUser,
   Ellipsis,
   FolderKanban,
   HardHat,
+  History,
   LayoutDashboard,
   LogOut,
   Settings,
@@ -93,6 +95,16 @@ export function AppSidebar() {
                   <span>Proyectos</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/calculos" />}
+                  isActive={pathname.startsWith("/calculos")}
+                  tooltip="Cálculos"
+                >
+                  <Calculator />
+                  <span>Cálculos</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
                   <CollapsibleTrigger
@@ -123,6 +135,16 @@ export function AppSidebar() {
                   </CollapsibleContent>
                 </SidebarMenuItem>
               </Collapsible>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<Link href="/historial" />}
+                  isActive={pathname.startsWith("/historial")}
+                  tooltip="Historial"
+                >
+                  <History />
+                  <span>Historial</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

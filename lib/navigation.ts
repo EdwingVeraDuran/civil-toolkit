@@ -30,6 +30,8 @@ export function getToolCategory(slug: string): ToolCategory | undefined {
 }
 
 export function getPageTitle(pathname: string): string {
+  if (pathname.startsWith("/calculos")) return "Cálculos"
+  if (pathname.startsWith("/historial")) return "Historial"
   if (pathname.startsWith("/proyectos")) return "Proyectos"
   if (pathname.startsWith("/configuracion")) return "Configuración"
   if (pathname.startsWith("/perfil")) return "Perfil"
