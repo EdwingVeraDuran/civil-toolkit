@@ -1,13 +1,5 @@
-import { FolderKanban } from "lucide-react"
-
-import { PagePlaceholder } from "@/components/page-placeholder"
+import { ProjectsList } from "@/components/projects/projects-list"
 
 export default function ProjectsPage() {
-  return (
-    <PagePlaceholder
-      icon={FolderKanban}
-      title="Proyectos"
-      description="Aquí encontrarás todos tus proyectos y sus memorias de cálculo asociadas."
-    />
-  )
+  return <ProjectsList />
 }
