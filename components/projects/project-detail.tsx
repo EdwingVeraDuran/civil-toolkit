@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import {
   ArrowLeft,
   CalendarDays,
@@ -10,12 +10,14 @@ import {
   ClipboardList,
   FileText,
   FolderKanban,
+  ListTodo,
   MapPin,
   User,
 } from "lucide-react"
 
 import { ProjectDeleteDialog } from "@/components/projects/project-delete-dialog"
 import { ProjectEditDialog } from "@/components/projects/project-edit-dialog"
+import { TaskList } from "@/components/tasks/task-list"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -64,6 +66,7 @@ type ProjectDetailProps = {
 
 export function ProjectDetail({ project }: ProjectDetailProps) {
   const router = useRouter()
+  const [taskCount, setTaskCount] = useState(0)
 
   const handleProjectUpdated = useCallback(() => {
     router.refresh()
@@ -72,6 +75,10 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
   const handleProjectDeleted = useCallback(() => {
     router.push("/proyectos")
   }, [router])
+
+  const handleTasksChanged = useCallback((count: number) => {
+    setTaskCount(count)
+  }, [])
 
   return (
     <div className="flex flex-1 flex-col gap-6">
@@ -109,6 +116,10 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             <ClipboardList className="size-4" />
             Resumen
           </TabsTrigger>
+          <TabsTrigger value="tareas">
+            <CheckSquare className="size-4" />
+            Tareas
+          </TabsTrigger>
           <TabsTrigger value="calculos">
             <FolderKanban className="size-4" />
             Cálculos
@@ -118,7 +129,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             Documentos
           </TabsTrigger>
           <TabsTrigger value="detalles">
-            <CheckSquare className="size-4" />
+            <ListTodo className="size-4" />
             Detalles
           </TabsTrigger>
         </TabsList>
@@ -145,7 +156,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               <Card className="gap-2 py-4">
                 <CardContent className="flex flex-col items-center gap-1 pt-0">
                   <CheckSquare className="size-5 text-muted-foreground" />
-                  <span className="text-2xl font-bold">0</span>
+                  <span className="text-2xl font-bold">{taskCount}</span>
                   <span className="text-xs text-muted-foreground">Tareas</span>
                 </CardContent>
               </Card>
@@ -184,16 +195,26 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                 <CardTitle className="text-base">Tareas y entregables</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-10 text-center">
-                  <CheckSquare className="size-6 text-muted-foreground" />
-                  <p className="text-sm font-medium">No hay tareas aún</p>
-                  <p className="text-xs text-muted-foreground">
-                    Las tareas y entregables del proyecto aparecerán aquí.
-                  </p>
-                </div>
+                <TaskList
+                  projectId={project.id}
+                  onTasksChanged={handleTasksChanged}
+                  readOnly
+                />
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* Tab Tareas */}
+        <TabsContent value="tareas" className="mt-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Tareas y entregables</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TaskList projectId={project.id} onTasksChanged={handleTasksChanged} />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Tab Cálculos */}
