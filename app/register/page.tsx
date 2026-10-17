@@ -2,30 +2,35 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 import { AuthCard } from "@/components/auth/auth-card";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { registerSchema, type RegisterValues } from "@/lib/schemas/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<RegisterValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (values: RegisterValues) => {
     setError(null);
-    setIsSubmitting(true);
-    const res = await register(name, email, password, confirmPassword);
-    setIsSubmitting(false);
+    const res = await register(values.name, values.email, values.password, values.confirmPassword);
     if (!res.ok) {
       setError(res.error ?? "No se pudo crear la cuenta");
       return;
@@ -36,6 +41,8 @@ export default function RegisterPage() {
     }
     router.replace("/");
   };
+
+  const { isSubmitting } = form.formState;
 
   return (
     <AuthCard
@@ -50,7 +57,7 @@ export default function RegisterPage() {
         </span>
       }
     >
-      <form className="space-y-4" onSubmit={onSubmit} noValidate>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
         <div className="space-y-2">
           <Label htmlFor="name">Nombre</Label>
           <Input
@@ -58,11 +65,11 @@ export default function RegisterPage() {
             type="text"
             autoComplete="name"
             placeholder="Tu nombre"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            aria-invalid={!!error && !name}
+            {...form.register("name")}
           />
+          {form.formState.errors.name && (
+            <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Correo electrónico</Label>
@@ -71,11 +78,11 @@ export default function RegisterPage() {
             type="email"
             autoComplete="email"
             placeholder="tucorreo@ejemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            aria-invalid={!!error && !email}
+            {...form.register("email")}
           />
+          {form.formState.errors.email && (
+            <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Contraseña</Label>
@@ -84,11 +91,11 @@ export default function RegisterPage() {
             type="password"
             autoComplete="new-password"
             placeholder="Mínimo 6 caracteres"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            aria-invalid={!!error && password.length < 6}
+            {...form.register("password")}
           />
+          {form.formState.errors.password && (
+            <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
@@ -97,11 +104,11 @@ export default function RegisterPage() {
             type="password"
             autoComplete="new-password"
             placeholder="Repite tu contraseña"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            aria-invalid={!!error && password !== confirmPassword}
+            {...form.register("confirmPassword")}
           />
+          {form.formState.errors.confirmPassword && (
+            <p className="text-sm text-destructive">{form.formState.errors.confirmPassword.message}</p>
+          )}
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" className="w-full" disabled={isSubmitting}>

@@ -2,34 +2,41 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 import { AuthCard } from "@/components/auth/auth-card";
 import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { loginSchema, type LoginValues } from "@/lib/schemas/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (values: LoginValues) => {
     setError(null);
-    setIsSubmitting(true);
-    const res = await login(email, password);
-    setIsSubmitting(false);
+    const res = await login(values.email, values.password);
     if (!res.ok) {
       setError(res.error ?? "No se pudo iniciar sesión");
       return;
     }
     router.replace("/");
   };
+
+  const { isSubmitting } = form.formState;
 
   return (
     <AuthCard
@@ -44,7 +51,7 @@ export default function LoginPage() {
         </span>
       }
     >
-      <form className="space-y-4" onSubmit={onSubmit} noValidate>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
         <div className="space-y-2">
           <Label htmlFor="email">Correo electrónico</Label>
           <Input
@@ -52,11 +59,11 @@ export default function LoginPage() {
             type="email"
             autoComplete="email"
             placeholder="tucorreo@ejemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            aria-invalid={!!error && !email}
+            {...form.register("email")}
           />
+          {form.formState.errors.email && (
+            <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Contraseña</Label>
@@ -65,11 +72,11 @@ export default function LoginPage() {
             type="password"
             autoComplete="current-password"
             placeholder="Introduce tu contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            aria-invalid={!!error && !password}
+            {...form.register("password")}
           />
+          {form.formState.errors.password && (
+            <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
+          )}
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" className="w-full" disabled={isSubmitting}>
