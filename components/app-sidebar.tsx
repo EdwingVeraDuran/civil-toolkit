@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   ChevronRight,
   CircleUser,
@@ -40,6 +40,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { useAuth } from "@/components/auth/auth-provider"
 import { toolCategories } from "@/lib/navigation"
 
 const activeUser = {
@@ -50,6 +51,8 @@ const activeUser = {
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { logout } = useAuth()
 
   return (
     <Sidebar>
@@ -157,7 +160,13 @@ export function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem variant="destructive">
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onClick={async () => {
+                      await logout()
+                      router.replace("/login")
+                    }}
+                  >
                     <LogOut />
                     Cerrar sesión
                   </DropdownMenuItem>
