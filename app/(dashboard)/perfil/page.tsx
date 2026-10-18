@@ -6,7 +6,7 @@ export default function ProfilePage() {
   return (
     <PagePlaceholder
       icon={UserRound}
-      title="Modificar perfil"
+      title="Mi Cuenta"
       description="Aquí podrás editar tu información personal y profesional."
     />
   )

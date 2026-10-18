@@ -2,17 +2,20 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import {
   Calculator,
   ChevronRight,
-  CircleUser,
   Ellipsis,
   FolderKanban,
   HardHat,
   History,
   LayoutDashboard,
   LogOut,
+  Monitor,
+  Moon,
   Settings,
+  Sun,
   UserRound,
   Wrench,
 } from "lucide-react"
@@ -27,6 +30,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu"
 import {
   Sidebar,
@@ -55,6 +63,7 @@ export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const { logout } = useAuth()
+  const { theme, setTheme } = useTheme()
 
   return (
     <Sidebar>
@@ -169,16 +178,37 @@ export function AppSidebar() {
                   <DropdownMenuLabel>{activeUser.name}</DropdownMenuLabel>
                   <DropdownMenuItem render={<Link href="/perfil" />}>
                     <UserRound />
-                    Modificar perfil
-                  </DropdownMenuItem>
-                  <DropdownMenuItem render={<Link href="/cuenta" />}>
-                    <CircleUser />
-                    Configuración de cuenta
+                    Mi Cuenta
                   </DropdownMenuItem>
                   <DropdownMenuItem render={<Link href="/configuracion" />}>
                     <Settings />
-                    Configuración de la aplicación
+                    Configuración
                   </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                      {theme === "dark" ? <Moon /> : <Sun />}
+                      Tema
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+                        <DropdownMenuRadioItem value="light">
+                          <Sun />
+                          Claro
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="dark">
+                          <Moon />
+                          Oscuro
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="system">
+                          <Monitor />
+                          Sistema
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuSub>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>

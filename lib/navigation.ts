@@ -34,8 +34,7 @@ export function getPageTitle(pathname: string): string {
   if (pathname.startsWith("/historial")) return "Historial"
   if (pathname.startsWith("/proyectos")) return "Proyectos"
   if (pathname.startsWith("/configuracion")) return "Configuración"
-  if (pathname.startsWith("/perfil")) return "Perfil"
-  if (pathname.startsWith("/cuenta")) return "Configuración de cuenta"
+  if (pathname.startsWith("/perfil")) return "Mi Cuenta"
 
   const match = pathname.match(/^\/herramientas\/([^/]+)/)
   if (match) {
