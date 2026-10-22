@@ -26,6 +26,11 @@ export function getToolInfo(id: string): ToolInfo | undefined {
   return TOOL_CATALOG.find((tool) => tool.id === id)
 }
 
+export function getToolCategorySlug(id: string): string | undefined {
+  const tool = getToolInfo(id)
+  return tool?.category
+}
+
 export function getToolsByCategory(slug: string): ToolInfo[] {
   return TOOL_CATALOG.filter((tool) => tool.category === slug)
 }

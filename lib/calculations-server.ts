@@ -17,7 +17,9 @@ export async function getAllCalculations(): Promise<Calculation[]> {
   return data ?? []
 }
 
-export async function getCalculationsByProject(projectId: string): Promise<Calculation[]> {
+export async function getCalculationsByProject(
+  projectId: string,
+): Promise<Calculation[]> {
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -32,4 +34,23 @@ export async function getCalculationsByProject(projectId: string): Promise<Calcu
   }
 
   return data ?? []
+}
+
+export async function getCalculationById(
+  calculationId: string,
+): Promise<Calculation | null> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from("calculations")
+    .select("*")
+    .eq("id", calculationId)
+    .maybeSingle()
+
+  if (error) {
+    console.error("Error fetching calculation:", error.message)
+    return null
+  }
+
+  return data
 }

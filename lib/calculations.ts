@@ -61,6 +61,36 @@ export async function updateCalculationProject(
   return {}
 }
 
+export async function updateCalculationFull(
+  id: string,
+  input: {
+    title: string
+    summary: string
+    inputs: JsonObject
+    result: JsonObject
+    project_id: string | null
+  },
+): Promise<{ error?: string }> {
+  const supabase = createClient()
+
+  const { error } = await supabase
+    .from("calculations")
+    .update({
+      title: input.title,
+      summary: input.summary,
+      inputs: input.inputs,
+      result: input.result,
+      project_id: input.project_id,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return {}
+}
 export async function deleteCalculation(id: string): Promise<{ error?: string }> {
   const supabase = createClient()
 

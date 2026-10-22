@@ -1,7 +1,8 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Loader2, Trash2 } from "lucide-react"
+import { Loader2, Pencil, Trash2 } from "lucide-react"
+import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -23,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { deleteCalculation, updateCalculationProject } from "@/lib/calculations"
-import { getToolInfo } from "@/lib/tools/catalog"
+import { getToolCategorySlug, getToolInfo } from "@/lib/tools/catalog"
 import { NO_PROJECT, NO_PROJECT_LABEL } from "@/lib/types/calculation"
 import type { Calculation } from "@/lib/types/calculation"
 import type { Project } from "@/lib/types/project"
@@ -55,6 +56,7 @@ export function CalculationItem({
   const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const toolName = getToolInfo(calculation.tool_id)?.name ?? calculation.tool_id
+  const categorySlug = getToolCategorySlug(calculation.tool_id)
 
   const projectItems = useMemo(
     () => [
@@ -116,52 +118,79 @@ export function CalculationItem({
             </div>
           </div>
 
-          <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-            <DialogTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label={`Eliminar ${calculation.title}`}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              }
-            />
-            <DialogContent className="sm:max-w-sm">
-              <DialogHeader>
-                <DialogTitle>Eliminar cálculo</DialogTitle>
-                <DialogDescription>
-                  ¿Estás seguro de que quieres eliminar{" "}
-                  <strong>{calculation.title}</strong>? Esta acción no se puede deshacer.
-                </DialogDescription>
-              </DialogHeader>
-              {deleteError && <p className="text-sm text-destructive">{deleteError}</p>}
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => setDeleteOpen(false)}
-                  disabled={isDeleting}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? (
-                    <>
-                      <Loader2 className="size-4 animate-spin" />
-                      Eliminando...
-                    </>
-                  ) : (
-                    "Eliminar"
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-1">
+            {categorySlug ? (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                render={
+                  <Link
+                    href={`/herramientas/${categorySlug}/${calculation.tool_id}?edit=${calculation.id}`}
+                    aria-label={`Editar ${calculation.title}`}
+                  />
+                }
+                nativeButton={false}
+              >
+                <Pencil className="size-4" />
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                disabled
+                aria-label={`Editar ${calculation.title}`}
+              >
+                <Pencil className="size-4" />
+              </Button>
+            )}
+
+            <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+              <DialogTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={`Eliminar ${calculation.title}`}
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                }
+              />
+              <DialogContent className="sm:max-w-sm">
+                <DialogHeader>
+                  <DialogTitle>Eliminar cálculo</DialogTitle>
+                  <DialogDescription>
+                    ¿Estás seguro de que quieres eliminar{" "}
+                    <strong>{calculation.title}</strong>? Esta acción no se puede deshacer.
+                  </DialogDescription>
+                </DialogHeader>
+                {deleteError && <p className="text-sm text-destructive">{deleteError}</p>}
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setDeleteOpen(false)}
+                    disabled={isDeleting}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" />
+                        Eliminando...
+                      </>
+                    ) : (
+                      "Eliminar"
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">

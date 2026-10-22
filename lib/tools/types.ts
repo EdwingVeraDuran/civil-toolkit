@@ -21,6 +21,17 @@ export type ToolInfo = {
   reference?: string
 }
 
+export type EditMode = {
+  calculationId: string
+  title: string
+  projectId: string | null
+}
+
+export type ToolComponentProps = {
+  initialInput?: Record<string, unknown>
+  editMode?: EditMode
+}
+
 export type ToolSnapshot = {
   inputs: Record<string, unknown>
   result: Record<string, unknown>
@@ -33,5 +44,6 @@ export type ToolDefinition<TInput, TResult> = {
   validate: (input: unknown) => ValidationResult
   calculate: (input: TInput) => TResult
   toSnapshot: (input: TInput, result: TResult) => ToolSnapshot
+  hydrateInput?: (savedInputs: Record<string, unknown>) => TInput
   component?: ComponentType
 }

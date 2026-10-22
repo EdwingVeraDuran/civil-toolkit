@@ -3,8 +3,9 @@
 import { useMemo, useState } from "react"
 import { ArrowRightLeft } from "lucide-react"
 
-import { UnitSelect } from "@/components/tools/unit-select"
 import { SaveCalculationButton } from "@/components/calculations/save-calculation-button"
+import { UpdateCalculationButton } from "@/components/calculations/update-calculation-button"
+import { UnitSelect } from "@/components/tools/unit-select"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -36,6 +37,7 @@ import { DIMENSION_LABELS, DIMENSIONS, type DimensionId } from "@/lib/units/type
 import type { UnitId } from "@/lib/units/units"
 import { unitsByDimension } from "@/lib/units/units"
 import { unitConverterDefinition } from "@/lib/tools/unit-converter/definition"
+import type { ToolComponentProps } from "@/lib/tools/types"
 
 const DECIMAL_ITEMS = [0, 1, 2, 3, 4, 6].map((n) => ({
   value: String(n),
@@ -62,12 +64,45 @@ function isDimensionId(value: string): value is DimensionId {
   return (DIMENSIONS as readonly string[]).includes(value)
 }
 
-export function UnitConverter() {
-  const [dimension, setDimension] = useState<DimensionId>("length")
-  const [fromUnitId, setFromUnitId] = useState("m")
-  const [toUnitId, setToUnitId] = useState("ft")
+function getDimensionFromUnit(unitId: string): DimensionId | null {
+  for (const dimension of DIMENSIONS) {
+    if (unitsByDimension(dimension).some((unit) => unit.id === unitId)) {
+      return dimension
+    }
+  }
+  return null
+}
+
+function hydrateUnitConverterInitialInput(
+  initialInput?: Record<string, unknown>,
+) {
+  if (!initialInput) return null
+
+  const value =
+    typeof initialInput.value === "number"
+      ? String(initialInput.value)
+      : typeof initialInput.value === "string"
+        ? initialInput.value
+        : "1"
+  const fromUnitId =
+    typeof initialInput.fromUnitId === "string" ? initialInput.fromUnitId : "m"
+  const toUnitId =
+    typeof initialInput.toUnitId === "string" ? initialInput.toUnitId : "ft"
+
+  const dimension = getDimensionFromUnit(fromUnitId) ?? "length"
+
+  return { dimension, fromUnitId, toUnitId, value }
+}
+
+export function UnitConverter({ initialInput, editMode }: ToolComponentProps) {
+  const hydrated = hydrateUnitConverterInitialInput(initialInput)
+  const [dimension, setDimension] = useState<DimensionId>(
+    hydrated?.dimension ?? "length",
+  )
+  const [fromUnitId, setFromUnitId] = useState(hydrated?.fromUnitId ?? "m")
+  const [toUnitId, setToUnitId] = useState(hydrated?.toUnitId ?? "ft")
   const [decimals, setDecimals] = useState(2)
-  const [valueInput, setValueInput] = useState("1")
+  const [valueInput, setValueInput] = useState(hydrated?.value ?? "1")
 
   const dimensionUnits = useMemo(() => unitsByDimension(dimension), [dimension])
 
@@ -265,11 +300,21 @@ export function UnitConverter() {
       </Card>
 
       <div className="flex justify-end">
-        <SaveCalculationButton
-          toolId={unitConverterDefinition.info.id}
-          toolName={unitConverterDefinition.info.name}
-          snapshot={snapshot}
-        />
+        {editMode ? (
+          <UpdateCalculationButton
+            calculationId={editMode.calculationId}
+            title={editMode.title}
+            projectId={editMode.projectId}
+            toolId={unitConverterDefinition.info.id}
+            snapshot={snapshot}
+          />
+        ) : (
+          <SaveCalculationButton
+            toolId={unitConverterDefinition.info.id}
+            toolName={unitConverterDefinition.info.name}
+            snapshot={snapshot}
+          />
+        )}
       </div>
     </div>
   )

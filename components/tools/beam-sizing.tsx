@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { SectionDiagram } from "@/components/tools/section-diagram"
 import { SaveCalculationButton } from "@/components/calculations/save-calculation-button"
+import { UpdateCalculationButton } from "@/components/calculations/update-calculation-button"
 import {
   Card,
   CardContent,
@@ -33,6 +34,7 @@ import {
   type SupportCondition,
 } from "@/lib/estructuras/nsr10"
 import { beamSizingDefinition } from "@/lib/tools/beam-sizing/definition"
+import type { ToolComponentProps } from "@/lib/tools/types"
 
 const BOOLEAN_ITEMS = [
   { value: "false", label: "No" },
@@ -110,15 +112,68 @@ function SelectField({
   )
 }
 
-export function BeamSizing() {
-  const [elementType, setElementType] = useState<ElementType>("viga")
-  const [supportCondition, setSupportCondition] = useState<SupportCondition>("simple")
-  const [capacity, setCapacity] = useState<DissipationCapacity>("DES")
-  const [spanInput, setSpanInput] = useState("6")
-  const [fyInput, setFyInput] = useState("420")
-  const [lightweight, setLightweight] = useState(false)
-  const [densityInput, setDensityInput] = useState("1800")
-  const [fragilePartitions, setFragilePartitions] = useState(false)
+function hydrateBeamSizingInitialInput(
+  initialInput?: Record<string, unknown>,
+) {
+  if (!initialInput) return null
+
+  const readString = (value: unknown, fallback: string) =>
+    typeof value === "string" ? value : fallback
+  const readNumberString = (value: unknown, fallback: string) =>
+    typeof value === "number" ? String(value) : readString(value, fallback)
+  const readBoolean = (value: unknown, fallback: boolean) =>
+    typeof value === "boolean" ? value : fallback
+
+  const elementType =
+    typeof initialInput.elementType === "string" &&
+    (ELEMENT_TYPES as readonly string[]).includes(initialInput.elementType)
+      ? (initialInput.elementType as ElementType)
+      : "viga"
+  const supportCondition =
+    typeof initialInput.supportCondition === "string" &&
+    (SUPPORT_CONDITIONS as readonly string[]).includes(
+      initialInput.supportCondition,
+    )
+      ? (initialInput.supportCondition as SupportCondition)
+      : "simple"
+  const capacity =
+    typeof initialInput.capacity === "string" &&
+    (DISSIPATION_CAPACITIES as readonly string[]).includes(
+      initialInput.capacity,
+    )
+      ? (initialInput.capacity as DissipationCapacity)
+      : "DES"
+
+  return {
+    elementType,
+    supportCondition,
+    capacity,
+    spanInput: readNumberString(initialInput.span, "6"),
+    fyInput: readNumberString(initialInput.fy, "420"),
+    lightweight: readBoolean(initialInput.lightweight, false),
+    densityInput: readNumberString(initialInput.concreteDensity, "1800"),
+    fragilePartitions: readBoolean(initialInput.fragilePartitions, false),
+  }
+}
+
+export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
+  const hydrated = hydrateBeamSizingInitialInput(initialInput)
+  const [elementType, setElementType] = useState<ElementType>(
+    hydrated?.elementType ?? "viga",
+  )
+  const [supportCondition, setSupportCondition] = useState<SupportCondition>(
+    hydrated?.supportCondition ?? "simple",
+  )
+  const [capacity, setCapacity] = useState<DissipationCapacity>(
+    hydrated?.capacity ?? "DES",
+  )
+  const [spanInput, setSpanInput] = useState(hydrated?.spanInput ?? "6")
+  const [fyInput, setFyInput] = useState(hydrated?.fyInput ?? "420")
+  const [lightweight, setLightweight] = useState(hydrated?.lightweight ?? false)
+  const [densityInput, setDensityInput] = useState(hydrated?.densityInput ?? "1800")
+  const [fragilePartitions, setFragilePartitions] = useState(
+    hydrated?.fragilePartitions ?? false,
+  )
 
   const rawInput = {
     elementType,
@@ -315,11 +370,21 @@ export function BeamSizing() {
       </Card>
 
       <div className="flex justify-end">
-        <SaveCalculationButton
-          toolId={beamSizingDefinition.info.id}
-          toolName={beamSizingDefinition.info.name}
-          snapshot={snapshot}
-        />
+        {editMode ? (
+          <UpdateCalculationButton
+            calculationId={editMode.calculationId}
+            title={editMode.title}
+            projectId={editMode.projectId}
+            toolId={beamSizingDefinition.info.id}
+            snapshot={snapshot}
+          />
+        ) : (
+          <SaveCalculationButton
+            toolId={beamSizingDefinition.info.id}
+            toolName={beamSizingDefinition.info.name}
+            snapshot={snapshot}
+          />
+        )}
       </div>
     </div>
   )

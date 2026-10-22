@@ -3,15 +3,21 @@ import { ArrowLeft } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { Button } from "@/components/ui/button"
-import type { ToolInfo } from "@/lib/tools/types"
+import type { EditMode, ToolInfo } from "@/lib/tools/types"
 
 type ToolShellProps = {
   info: ToolInfo
   backLink?: { href: string; label: string }
+  editMode?: EditMode
   children: ReactNode
 }
 
-export function ToolShell({ info, backLink, children }: ToolShellProps) {
+export function ToolShell({
+  info,
+  backLink,
+  editMode,
+  children,
+}: ToolShellProps) {
   const Icon = info.icon
 
   return (
@@ -22,6 +28,7 @@ export function ToolShell({ info, backLink, children }: ToolShellProps) {
           size="sm"
           className="-ml-2 w-fit text-muted-foreground"
           render={<Link href={backLink.href} />}
+          nativeButton={false}
         >
           <ArrowLeft className="size-4" />
           {backLink.label}
@@ -34,8 +41,14 @@ export function ToolShell({ info, backLink, children }: ToolShellProps) {
           </span>
         ) : null}
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight">{info.name}</h1>
-          <p className="text-sm text-muted-foreground">{info.description}</p>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {editMode ? `Editando: ${editMode.title}` : info.name}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {editMode
+              ? "Modifica las entradas y actualiza el cálculo guardado."
+              : info.description}
+          </p>
           {info.reference ? (
             <p className="text-xs text-muted-foreground/80">{info.reference}</p>
           ) : null}
