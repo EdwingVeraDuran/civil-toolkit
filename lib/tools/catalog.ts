@@ -1,4 +1,4 @@
-import { Ruler } from "lucide-react"
+import { Landmark, Ruler } from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
 
 export const unitConverterInfo: ToolInfo = {
@@ -10,7 +10,17 @@ export const unitConverterInfo: ToolInfo = {
   icon: Ruler,
 }
 
-export const TOOL_CATALOG: ToolInfo[] = [unitConverterInfo]
+export const beamSizingInfo: ToolInfo = {
+  id: "beam-sizing",
+  name: "Predimensionado de vigas",
+  description:
+    "Estima el peralte y el ancho de vigas y losas en una dirección por control de deflexiones.",
+  category: "estructuras",
+  icon: Landmark,
+  reference: "NSR-10, Título C — Concreto estructural",
+}
+
+export const TOOL_CATALOG: ToolInfo[] = [unitConverterInfo, beamSizingInfo]
 
 export function getToolInfo(id: string): ToolInfo | undefined {
   return TOOL_CATALOG.find((tool) => tool.id === id)

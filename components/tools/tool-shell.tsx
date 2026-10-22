@@ -36,6 +36,9 @@ export function ToolShell({ info, backLink, children }: ToolShellProps) {
         <div className="space-y-1">
           <h1 className="text-xl font-semibold tracking-tight">{info.name}</h1>
           <p className="text-sm text-muted-foreground">{info.description}</p>
+          {info.reference ? (
+            <p className="text-xs text-muted-foreground/80">{info.reference}</p>
+          ) : null}
         </div>
       </header>
       {children}

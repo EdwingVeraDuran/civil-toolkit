@@ -18,6 +18,7 @@ export type ToolInfo = {
   description: string
   category: ToolCategorySlug
   icon?: LucideIcon
+  reference?: string
 }
 
 export type ToolDefinition<TInput, TResult> = {
