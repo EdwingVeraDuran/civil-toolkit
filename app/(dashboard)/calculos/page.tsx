@@ -1,13 +1,18 @@
-import { Calculator } from "lucide-react"
+import { CalculationList } from "@/components/calculations/calculation-list"
+import { getAllCalculations } from "@/lib/calculations-server"
+import { getAllProjects } from "@/lib/projects-server"
 
-import { PagePlaceholder } from "@/components/page-placeholder"
+export default async function CalculosPage() {
+  const [calculations, projects] = await Promise.all([
+    getAllCalculations(),
+    getAllProjects(),
+  ])
 
-export default function CalculosPage() {
   return (
-    <PagePlaceholder
-      icon={Calculator}
-      title="Cálculos"
-      description="Aquí encontrarás todos tus cálculos y memorias de cálculo guardados."
+    <CalculationList
+      calculations={calculations}
+      projects={projects}
+      showFilter
     />
   )
 }

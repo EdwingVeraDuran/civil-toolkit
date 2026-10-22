@@ -52,4 +52,23 @@ describe("unitConverterDefinition", () => {
     expect(unitConverterDefinition.info.id).toBe("unit-converter")
     expect(unitConverterDefinition.info.category).toBe("general")
   })
+
+  it("genera un snapshot JSON plano con entradas y resultado", () => {
+    const input = unitConverterDefinition.schema.parse({
+      value: "1",
+      fromUnitId: "m",
+      toUnitId: "ft",
+    })
+    const result = unitConverterDefinition.calculate(input)
+    const snapshot = unitConverterDefinition.toSnapshot(input, result)
+
+    expect(snapshot.inputs).toEqual({ value: 1, fromUnitId: "m", toUnitId: "ft" })
+    expect(snapshot.result.fromUnitId).toBe("m")
+    expect(snapshot.result.toUnitId).toBe("ft")
+    expect(snapshot.result.rows).toBeInstanceOf(Array)
+    expect(snapshot.summary).toContain("m")
+    expect(snapshot.summary).toContain("ft")
+    expect(snapshot.summary).toContain("→")
+    expect(() => JSON.stringify(snapshot)).not.toThrow()
+  })
 })

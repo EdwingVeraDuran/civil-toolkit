@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation"
 
 import { ProjectDetail } from "@/components/projects/project-detail"
-import { getProjectById } from "@/lib/projects-server"
+import { getCalculationsByProject } from "@/lib/calculations-server"
+import { getAllProjects, getProjectById } from "@/lib/projects-server"
 
 export default async function ProjectDetailPage({
   params,
@@ -15,5 +16,16 @@ export default async function ProjectDetailPage({
     notFound()
   }
 
-  return <ProjectDetail project={project} />
+  const [calculations, projects] = await Promise.all([
+    getCalculationsByProject(id),
+    getAllProjects(),
+  ])
+
+  return (
+    <ProjectDetail
+      project={project}
+      calculations={calculations}
+      projects={projects}
+    />
+  )
 }

@@ -100,4 +100,17 @@ describe("beamSizingDefinition", () => {
     })
     expect(result.valid).toBe(false)
   })
+
+  it("genera un snapshot JSON plano con entradas y resultado", () => {
+    const input = { ...base, span: 6 }
+    const result = calculateBeamSizing(input)
+    const snapshot = beamSizingDefinition.toSnapshot(input, result)
+
+    expect(snapshot.inputs).toEqual(input)
+    expect(snapshot.result.h).toBe(400)
+    expect(snapshot.result.b).toBe(250)
+    expect(snapshot.result.hMinExact).toBeCloseTo(375, 6)
+    expect(snapshot.summary).toBe("Viga 250 × 400 mm")
+    expect(() => JSON.stringify(snapshot)).not.toThrow()
+  })
 })

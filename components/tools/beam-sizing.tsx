@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { SectionDiagram } from "@/components/tools/section-diagram"
+import { SaveCalculationButton } from "@/components/calculations/save-calculation-button"
 import {
   Card,
   CardContent,
@@ -136,9 +137,16 @@ export function BeamSizing() {
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
 
-  const result = validation.valid
-    ? beamSizingDefinition.calculate(beamSizingDefinition.schema.parse(rawInput))
+  const parsedInput = validation.valid
+    ? beamSizingDefinition.schema.parse(rawInput)
     : null
+
+  const result = parsedInput ? beamSizingDefinition.calculate(parsedInput) : null
+
+  const snapshot =
+    parsedInput && result
+      ? beamSizingDefinition.toSnapshot(parsedInput, result)
+      : null
 
   const spanError = fieldError("span")
   const fyError = fieldError("fy")
@@ -305,6 +313,14 @@ export function BeamSizing() {
           )}
         </CardContent>
       </Card>
+
+      <div className="flex justify-end">
+        <SaveCalculationButton
+          toolId={beamSizingDefinition.info.id}
+          toolName={beamSizingDefinition.info.name}
+          snapshot={snapshot}
+        />
+      </div>
     </div>
   )
 }

@@ -15,6 +15,7 @@ import {
   User,
 } from "lucide-react"
 
+import { CalculationList } from "@/components/calculations/calculation-list"
 import { ProjectDeleteDialog } from "@/components/projects/project-delete-dialog"
 import { ProjectEditDialog } from "@/components/projects/project-edit-dialog"
 import { TaskList } from "@/components/tasks/task-list"
@@ -23,6 +24,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
+import type { Calculation } from "@/lib/types/calculation"
 import type { Project, ProjectStatus } from "@/lib/types/project"
 import { PROJECT_STATUS_LABELS } from "@/lib/types/project"
 
@@ -62,9 +64,15 @@ function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType; label:
 
 type ProjectDetailProps = {
   project: Project
+  calculations: Calculation[]
+  projects: Project[]
 }
 
-export function ProjectDetail({ project }: ProjectDetailProps) {
+export function ProjectDetail({
+  project,
+  calculations,
+  projects,
+}: ProjectDetailProps) {
   const router = useRouter()
   const [taskCount, setTaskCount] = useState(0)
 
@@ -142,7 +150,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               <Card className="gap-2 py-4">
                 <CardContent className="flex flex-col items-center gap-1 pt-0">
                   <FolderKanban className="size-5 text-muted-foreground" />
-                  <span className="text-2xl font-bold">0</span>
+                  <span className="text-2xl font-bold">{calculations.length}</span>
                   <span className="text-xs text-muted-foreground">Cálculos</span>
                 </CardContent>
               </Card>
@@ -219,13 +227,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
         {/* Tab Cálculos */}
         <TabsContent value="calculos" className="mt-4">
-          <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-20 text-center">
-            <FolderKanban className="size-8 text-muted-foreground" />
-            <h3 className="text-lg font-semibold">No hay cálculos aún</h3>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Los cálculos y memorias de cálculo asociados a este proyecto aparecerán aquí.
-            </p>
-          </div>
+          <CalculationList calculations={calculations} projects={projects} />
         </TabsContent>
 
         {/* Tab Documentos */}

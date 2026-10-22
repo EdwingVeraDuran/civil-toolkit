@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import { ArrowRightLeft } from "lucide-react"
 
 import { UnitSelect } from "@/components/tools/unit-select"
+import { SaveCalculationButton } from "@/components/calculations/save-calculation-button"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -77,9 +78,18 @@ export function UnitConverter() {
     ? undefined
     : validation.errors.find((error) => error.field === "value")?.message
 
-  const result = validation.valid
-    ? unitConverterDefinition.calculate(unitConverterDefinition.schema.parse(rawInput))
+  const parsedInput = validation.valid
+    ? unitConverterDefinition.schema.parse(rawInput)
     : null
+
+  const result = parsedInput
+    ? unitConverterDefinition.calculate(parsedInput)
+    : null
+
+  const snapshot =
+    parsedInput && result
+      ? unitConverterDefinition.toSnapshot(parsedInput, result)
+      : null
 
   const handleDimensionChange = (next: string | null) => {
     if (!next || !isDimensionId(next)) {
@@ -253,6 +263,14 @@ export function UnitConverter() {
           )}
         </CardContent>
       </Card>
+
+      <div className="flex justify-end">
+        <SaveCalculationButton
+          toolId={unitConverterDefinition.info.id}
+          toolName={unitConverterDefinition.info.name}
+          snapshot={snapshot}
+        />
+      </div>
     </div>
   )
 }
