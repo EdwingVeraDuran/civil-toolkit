@@ -1,4 +1,4 @@
-import { Landmark, Ruler, TrendingUp } from "lucide-react"
+import { Landmark, Ruler, Shapes, TrendingUp } from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
 
 export const unitConverterInfo: ToolInfo = {
@@ -8,6 +8,16 @@ export const unitConverterInfo: ToolInfo = {
     "Convierte entre unidades de longitud, área, volumen, masa, fuerza, presión, ángulo y temperatura.",
   category: "general",
   icon: Ruler,
+}
+
+export const areaCalculatorInfo: ToolInfo = {
+  id: "area-calculator",
+  name: "Calculadora de áreas",
+  description:
+    "Calcula el área de cuadrados, rectángulos, triángulos, círculos, trapecios, paralelogramos, rombos y polígonos regulares.",
+  category: "general",
+  icon: Shapes,
+  reference: "Geometría básica — sin verificación normativa",
 }
 
 export const beamSizingInfo: ToolInfo = {
@@ -32,6 +42,7 @@ export const slopeCalculatorInfo: ToolInfo = {
 
 export const TOOL_CATALOG: ToolInfo[] = [
   unitConverterInfo,
+  areaCalculatorInfo,
   slopeCalculatorInfo,
   beamSizingInfo,
 ]
