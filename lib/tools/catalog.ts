@@ -1,5 +1,6 @@
 import {
   ChartSpline,
+  Combine,
   Compass,
   Landmark,
   LandPlot,
@@ -49,6 +50,16 @@ export const beamSizingInfo: ToolInfo = {
   reference: "NSR-10, Título C — Concreto estructural",
 }
 
+export const loadCombinationsInfo: ToolInfo = {
+  id: "load-combinations",
+  name: "Combinaciones de carga (NSR-10)",
+  description:
+    "Aplica los factores de mayoración de la norma a las cargas muerta, viva, sismo y viento, y entrega las combinaciones de diseño.",
+  category: "estructuras",
+  icon: Combine,
+  reference: "NSR-10, B.2.4.2 — Tabla B.2-3 (combinaciones mayoradas)",
+}
+
 export const soilPhaseRelationshipsInfo: ToolInfo = {
   id: "soil-phase-relationships",
   name: "Relaciones volumétricas y gravimétricas",
@@ -95,6 +106,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   slopeCalculatorInfo,
   interpolationCalculatorInfo,
   beamSizingInfo,
+  loadCombinationsInfo,
   soilPhaseRelationshipsInfo,
   bearingAzimuthInfo,
   coordinatesAreaInfo,
