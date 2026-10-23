@@ -569,7 +569,6 @@ export function AreaCalculator({ initialInput, editMode }: ToolComponentProps) {
             calculationId={editMode.calculationId}
             title={editMode.title}
             projectId={editMode.projectId}
-            toolId={areaCalculatorDefinition.info.id}
             snapshot={snapshot}
           />
         ) : (

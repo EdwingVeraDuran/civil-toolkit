@@ -590,7 +590,6 @@ export function SlopeCalculator({
             calculationId={editMode.calculationId}
             title={editMode.title}
             projectId={editMode.projectId}
-            toolId={slopeCalculatorDefinition.info.id}
             snapshot={snapshot}
           />
         ) : (

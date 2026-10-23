@@ -306,7 +306,6 @@ export function UnitConverter({ initialInput, editMode }: ToolComponentProps) {
             calculationId={editMode.calculationId}
             title={editMode.title}
             projectId={editMode.projectId}
-            toolId={unitConverterDefinition.info.id}
             snapshot={snapshot}
           />
         ) : (

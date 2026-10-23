@@ -705,7 +705,6 @@ export function InterpolationCalculator({
             calculationId={editMode.calculationId}
             title={editMode.title}
             projectId={editMode.projectId}
-            toolId={interpolationCalculatorDefinition.info.id}
             snapshot={snapshot}
           />
         ) : (

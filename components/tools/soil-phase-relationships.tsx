@@ -724,7 +724,6 @@ export function SoilPhaseRelationships({
             calculationId={editMode.calculationId}
             title={editMode.title}
             projectId={editMode.projectId}
-            toolId={soilPhaseRelationshipsDefinition.info.id}
             snapshot={snapshot}
           />
         ) : (

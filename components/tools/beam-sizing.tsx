@@ -375,7 +375,6 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
             calculationId={editMode.calculationId}
             title={editMode.title}
             projectId={editMode.projectId}
-            toolId={beamSizingDefinition.info.id}
             snapshot={snapshot}
           />
         ) : (

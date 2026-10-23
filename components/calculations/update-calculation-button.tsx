@@ -12,7 +12,6 @@ type UpdateCalculationButtonProps = {
   calculationId: string
   title: string
   projectId: string | null
-  toolId: string
   snapshot: ToolSnapshot | null
 }
 
@@ -20,7 +19,6 @@ export function UpdateCalculationButton({
   calculationId,
   title,
   projectId,
-  toolId,
   snapshot,
 }: UpdateCalculationButtonProps) {
   const router = useRouter()
