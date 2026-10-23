@@ -1,6 +1,7 @@
 import type { Unit } from "@/lib/units/types"
+import { LOCALE } from "@/lib/config/locale"
 
-export const LOCALE = "es-CO"
+export { LOCALE }
 export const DEFAULT_DECIMALS = 2
 export const DECIMAL_OPTIONS = [0, 1, 2, 3, 4, 6] as const
 
@@ -11,7 +12,10 @@ function formatFixed(value: number, decimals: number): string {
   })
 }
 
-export function formatNumber(value: number, decimals: number = DEFAULT_DECIMALS): string {
+export function formatNumber(
+  value: number,
+  decimals: number = DEFAULT_DECIMALS
+): string {
   if (!Number.isFinite(value)) return "—"
   if (value === 0) return formatFixed(0, decimals)
 
@@ -23,6 +27,10 @@ export function formatNumber(value: number, decimals: number = DEFAULT_DECIMALS)
   return formatFixed(value, decimals)
 }
 
-export function formatWithUnit(value: number, unit: Unit, decimals: number = DEFAULT_DECIMALS): string {
+export function formatWithUnit(
+  value: number,
+  unit: Unit,
+  decimals: number = DEFAULT_DECIMALS
+): string {
   return `${formatNumber(value, decimals)} ${unit.symbol}`
 }

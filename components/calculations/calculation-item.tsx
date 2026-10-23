@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { deleteCalculation, updateCalculationProject } from "@/lib/calculations"
+import { formatDate } from "@/lib/format/date"
 import { getToolInfo } from "@/lib/tools/catalog"
 import { NO_PROJECT, NO_PROJECT_LABEL } from "@/lib/types/calculation"
 import type { Calculation } from "@/lib/types/calculation"
@@ -33,14 +34,6 @@ type CalculationItemProps = {
   calculation: Calculation
   projects: Project[]
   onChanged: () => void
-}
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("es-CO", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })
 }
 
 export function CalculationItem({

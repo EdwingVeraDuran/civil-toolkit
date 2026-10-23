@@ -3,6 +3,7 @@ import { CalendarDays, MapPin, User } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatDate } from "@/lib/format/date"
 import { cn } from "@/lib/utils"
 import type { Project, ProjectStatus } from "@/lib/types/project"
 import { PROJECT_STATUS_LABELS } from "@/lib/types/project"
@@ -15,14 +16,6 @@ const STATUS_COLORS: Record<ProjectStatus, string> = {
   cancelled: "bg-red-500/15 text-red-600 dark:text-red-400",
 }
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T00:00:00").toLocaleDateString("es-VE", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })
-}
-
 type ProjectCardProps = {
   project: Project
 }
@@ -33,7 +26,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <Card className="gap-4 transition-shadow hover:shadow-md">
         <CardHeader className="pb-0">
           <div className="flex items-start justify-between gap-2">
-            <CardTitle className="text-base leading-tight">{project.name}</CardTitle>
+            <CardTitle className="text-base leading-tight">
+              {project.name}
+            </CardTitle>
             <Badge
               variant="secondary"
               className={cn("shrink-0", STATUS_COLORS[project.status])}

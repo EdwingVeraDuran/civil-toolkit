@@ -16,11 +16,16 @@ type TaskListProps = {
   readOnly?: boolean
 }
 
-export function TaskList({ projectId, onTasksChanged, readOnly = false }: TaskListProps) {
+export function TaskList({
+  projectId,
+  onTasksChanged,
+  readOnly = false,
+}: TaskListProps) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [newTitle, setNewTitle] = useState("")
   const [isCreating, setIsCreating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const refreshTasks = useCallback(async () => {
     const data = await getTasks(projectId)
@@ -47,14 +52,18 @@ export function TaskList({ projectId, onTasksChanged, readOnly = false }: TaskLi
     const title = newTitle.trim()
     if (!title) return
 
+    setError(null)
     setIsCreating(true)
     const { error } = await createTask({ project_id: projectId, title })
     setIsCreating(false)
 
-    if (!error) {
-      setNewTitle("")
-      void refreshTasks()
+    if (error) {
+      setError(error)
+      return
     }
+
+    setNewTitle("")
+    void refreshTasks()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -101,6 +110,12 @@ export function TaskList({ projectId, onTasksChanged, readOnly = false }: TaskLi
         </div>
       )}
 
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
+
       {/* Lista de tareas */}
       {tasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-10 text-center">
@@ -115,7 +130,13 @@ export function TaskList({ projectId, onTasksChanged, readOnly = false }: TaskLi
       ) : (
         <div className="flex flex-col gap-2">
           {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} onChanged={refreshTasks} />
+            <TaskItem
+              key={task.id}
+              task={task}
+              onChanged={refreshTasks}
+              readOnly={readOnly}
+              onError={setError}
+            />
           ))}
         </div>
       )}

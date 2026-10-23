@@ -23,6 +23,11 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  DATE_LONG_OPTIONS,
+  DATE_SHORT_OPTIONS,
+  formatDate,
+} from "@/lib/format/date"
 import { cn } from "@/lib/utils"
 import type { Calculation } from "@/lib/types/calculation"
 import type { Project, ProjectStatus } from "@/lib/types/project"
@@ -36,23 +41,15 @@ const STATUS_COLORS: Record<ProjectStatus, string> = {
   cancelled: "bg-red-500/15 text-red-600 dark:text-red-400",
 }
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T00:00:00").toLocaleDateString("es-VE", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  })
-}
-
-function formatDateShort(dateStr: string): string {
-  return new Date(dateStr + "T00:00:00").toLocaleDateString("es-VE", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })
-}
-
-function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
+function InfoRow({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ElementType
+  label: string
+  value: string
+}) {
   return (
     <div className="flex items-center gap-2 text-sm">
       <Icon className="size-4 text-muted-foreground" />
@@ -92,7 +89,10 @@ export function ProjectDetail({
     <div className="flex flex-1 flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col gap-4">
-        <Link href="/proyectos" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+        <Link
+          href="/proyectos"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="size-4" />
           Volver a proyectos
         </Link>
@@ -100,14 +100,22 @@ export function ProjectDetail({
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-bold">{project.name}</h1>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className={cn(STATUS_COLORS[project.status])}>
+              <Badge
+                variant="secondary"
+                className={cn(STATUS_COLORS[project.status])}
+              >
                 {PROJECT_STATUS_LABELS[project.status]}
               </Badge>
-              <span className="text-sm text-muted-foreground">{project.client_name}</span>
+              <span className="text-sm text-muted-foreground">
+                {project.client_name}
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <ProjectEditDialog project={project} onProjectUpdated={handleProjectUpdated} />
+            <ProjectEditDialog
+              project={project}
+              onProjectUpdated={handleProjectUpdated}
+            />
             <ProjectDeleteDialog
               projectId={project.id}
               projectName={project.name}
@@ -150,15 +158,21 @@ export function ProjectDetail({
               <Card className="gap-2 py-4">
                 <CardContent className="flex flex-col items-center gap-1 pt-0">
                   <FolderKanban className="size-5 text-muted-foreground" />
-                  <span className="text-2xl font-bold">{calculations.length}</span>
-                  <span className="text-xs text-muted-foreground">Cálculos</span>
+                  <span className="text-2xl font-bold">
+                    {calculations.length}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Cálculos
+                  </span>
                 </CardContent>
               </Card>
               <Card className="gap-2 py-4">
                 <CardContent className="flex flex-col items-center gap-1 pt-0">
                   <FileText className="size-5 text-muted-foreground" />
                   <span className="text-2xl font-bold">0</span>
-                  <span className="text-xs text-muted-foreground">Documentos</span>
+                  <span className="text-xs text-muted-foreground">
+                    Documentos
+                  </span>
                 </CardContent>
               </Card>
               <Card className="gap-2 py-4">
@@ -173,25 +187,46 @@ export function ProjectDetail({
             {/* Info rápida */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Información del proyecto</CardTitle>
+                <CardTitle className="text-base">
+                  Información del proyecto
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-3">
-                <InfoRow icon={User} label="Cliente" value={project.client_name} />
-                {project.location && <InfoRow icon={MapPin} label="Ubicación" value={project.location} />}
+                <InfoRow
+                  icon={User}
+                  label="Cliente"
+                  value={project.client_name}
+                />
+                {project.location && (
+                  <InfoRow
+                    icon={MapPin}
+                    label="Ubicación"
+                    value={project.location}
+                  />
+                )}
                 {project.start_date && (
-                  <InfoRow icon={CalendarDays} label="Inicio" value={formatDateShort(project.start_date)} />
+                  <InfoRow
+                    icon={CalendarDays}
+                    label="Inicio"
+                    value={formatDate(project.start_date, DATE_SHORT_OPTIONS)}
+                  />
                 )}
                 {project.estimated_end_date && (
                   <InfoRow
                     icon={CalendarDays}
                     label="Fin estimado"
-                    value={formatDateShort(project.estimated_end_date)}
+                    value={formatDate(
+                      project.estimated_end_date,
+                      DATE_SHORT_OPTIONS
+                    )}
                   />
                 )}
                 {project.description && (
                   <>
                     <Separator />
-                    <p className="text-sm text-muted-foreground">{project.description}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {project.description}
+                    </p>
                   </>
                 )}
               </CardContent>
@@ -200,7 +235,9 @@ export function ProjectDetail({
             {/* Tareas/Entregables */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Tareas y entregables</CardTitle>
+                <CardTitle className="text-base">
+                  Tareas y entregables
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <TaskList
@@ -220,7 +257,10 @@ export function ProjectDetail({
               <CardTitle className="text-base">Tareas y entregables</CardTitle>
             </CardHeader>
             <CardContent>
-              <TaskList projectId={project.id} onTasksChanged={handleTasksChanged} />
+              <TaskList
+                projectId={project.id}
+                onTasksChanged={handleTasksChanged}
+              />
             </CardContent>
           </Card>
         </TabsContent>
@@ -236,7 +276,8 @@ export function ProjectDetail({
             <FileText className="size-8 text-muted-foreground" />
             <h3 className="text-lg font-semibold">No hay documentos aún</h3>
             <p className="max-w-sm text-sm text-muted-foreground">
-              Los documentos y archivos asociados a este proyecto aparecerán aquí.
+              Los documentos y archivos asociados a este proyecto aparecerán
+              aquí.
             </p>
           </div>
         </TabsContent>
@@ -255,28 +296,48 @@ export function ProjectDetail({
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-xs text-muted-foreground">Cliente</span>
-                  <span className="text-sm font-medium">{project.client_name}</span>
+                  <span className="text-sm font-medium">
+                    {project.client_name}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-xs text-muted-foreground">Estado</span>
-                  <Badge variant="secondary" className={cn("w-fit", STATUS_COLORS[project.status])}>
+                  <Badge
+                    variant="secondary"
+                    className={cn("w-fit", STATUS_COLORS[project.status])}
+                  >
                     {PROJECT_STATUS_LABELS[project.status]}
                   </Badge>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs text-muted-foreground">Ubicación</span>
-                  <span className="text-sm font-medium">{project.location ?? "—"}</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs text-muted-foreground">Fecha de inicio</span>
+                  <span className="text-xs text-muted-foreground">
+                    Ubicación
+                  </span>
                   <span className="text-sm font-medium">
-                    {project.start_date ? formatDate(project.start_date) : "—"}
+                    {project.location ?? "—"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs text-muted-foreground">Fecha de fin estimada</span>
+                  <span className="text-xs text-muted-foreground">
+                    Fecha de inicio
+                  </span>
                   <span className="text-sm font-medium">
-                    {project.estimated_end_date ? formatDate(project.estimated_end_date) : "—"}
+                    {project.start_date
+                      ? formatDate(project.start_date, DATE_LONG_OPTIONS)
+                      : "—"}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs text-muted-foreground">
+                    Fecha de fin estimada
+                  </span>
+                  <span className="text-sm font-medium">
+                    {project.estimated_end_date
+                      ? formatDate(
+                          project.estimated_end_date,
+                          DATE_LONG_OPTIONS
+                        )
+                      : "—"}
                   </span>
                 </div>
               </div>
@@ -285,7 +346,9 @@ export function ProjectDetail({
                 <>
                   <Separator />
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs text-muted-foreground">Descripción</span>
+                    <span className="text-xs text-muted-foreground">
+                      Descripción
+                    </span>
                     <p className="text-sm">{project.description}</p>
                   </div>
                 </>
@@ -296,11 +359,17 @@ export function ProjectDetail({
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-1">
                   <span className="text-xs text-muted-foreground">Creado</span>
-                  <span className="text-sm font-medium">{formatDate(project.created_at)}</span>
+                  <span className="text-sm font-medium">
+                    {formatDate(project.created_at, DATE_LONG_OPTIONS)}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs text-muted-foreground">Última actualización</span>
-                  <span className="text-sm font-medium">{formatDate(project.updated_at)}</span>
+                  <span className="text-xs text-muted-foreground">
+                    Última actualización
+                  </span>
+                  <span className="text-sm font-medium">
+                    {formatDate(project.updated_at, DATE_LONG_OPTIONS)}
+                  </span>
                 </div>
               </div>
             </CardContent>

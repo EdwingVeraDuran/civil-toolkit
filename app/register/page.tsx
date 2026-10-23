@@ -1,22 +1,23 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 
-import { AuthCard } from "@/components/auth/auth-card";
-import { useAuth } from "@/components/auth/auth-provider";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { registerSchema, type RegisterValues } from "@/lib/schemas/auth";
+import { AuthCard } from "@/components/auth/auth-card"
+import { useAuth } from "@/components/auth/auth-provider"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { registerSchema, type RegisterValues } from "@/lib/schemas/auth"
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const { register } = useAuth();
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter()
+  const { register } = useAuth()
+  const [error, setError] = useState<string | null>(null)
+  const [info, setInfo] = useState<string | null>(null)
 
   const form = useForm<RegisterValues>({
     resolver: zodResolver(registerSchema),
@@ -26,23 +27,29 @@ export default function RegisterPage() {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   const onSubmit = async (values: RegisterValues) => {
-    setError(null);
-    const res = await register(values.name, values.email, values.password, values.confirmPassword);
+    setError(null)
+    setInfo(null)
+    const res = await register(
+      values.name,
+      values.email,
+      values.password,
+      values.confirmPassword
+    )
     if (!res.ok) {
-      setError(res.error ?? "No se pudo crear la cuenta");
-      return;
+      setError(res.error ?? "No se pudo crear la cuenta")
+      return
     }
     if (res.requiresConfirmation) {
-      setError("Revisa tu correo para confirmar tu cuenta");
-      return;
+      setInfo("Revisa tu correo para confirmar tu cuenta")
+      return
     }
-    router.replace("/");
-  };
+    router.replace("/")
+  }
 
-  const { isSubmitting } = form.formState;
+  const { isSubmitting } = form.formState
 
   return (
     <AuthCard
@@ -51,13 +58,20 @@ export default function RegisterPage() {
       footer={
         <span className="text-muted-foreground">
           ¿Ya tienes una cuenta?{" "}
-          <Link href="/login" className="font-medium text-primary underline-offset-4 hover:underline">
+          <Link
+            href="/login"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
             Inicia sesión
           </Link>
         </span>
       }
     >
-      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+      <form
+        className="space-y-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+      >
         <div className="space-y-2">
           <Label htmlFor="name">Nombre</Label>
           <Input
@@ -68,7 +82,9 @@ export default function RegisterPage() {
             {...form.register("name")}
           />
           {form.formState.errors.name && (
-            <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>
+            <p className="text-sm text-destructive">
+              {form.formState.errors.name.message}
+            </p>
           )}
         </div>
         <div className="space-y-2">
@@ -81,7 +97,9 @@ export default function RegisterPage() {
             {...form.register("email")}
           />
           {form.formState.errors.email && (
-            <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+            <p className="text-sm text-destructive">
+              {form.formState.errors.email.message}
+            </p>
           )}
         </div>
         <div className="space-y-2">
@@ -94,7 +112,9 @@ export default function RegisterPage() {
             {...form.register("password")}
           />
           {form.formState.errors.password && (
-            <p className="text-sm text-destructive">{form.formState.errors.password.message}</p>
+            <p className="text-sm text-destructive">
+              {form.formState.errors.password.message}
+            </p>
           )}
         </div>
         <div className="space-y-2">
@@ -107,14 +127,21 @@ export default function RegisterPage() {
             {...form.register("confirmPassword")}
           />
           {form.formState.errors.confirmPassword && (
-            <p className="text-sm text-destructive">{form.formState.errors.confirmPassword.message}</p>
+            <p className="text-sm text-destructive">
+              {form.formState.errors.confirmPassword.message}
+            </p>
           )}
         </div>
+        {info && (
+          <p role="status" className="text-sm text-muted-foreground">
+            {info}
+          </p>
+        )}
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Creando cuenta..." : "Crear cuenta"}
         </Button>
       </form>
     </AuthCard>
-  );
+  )
 }

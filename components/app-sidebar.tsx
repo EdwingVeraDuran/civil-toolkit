@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
+import type { User } from "@supabase/supabase-js"
 import {
   Calculator,
   ChevronRight,
@@ -58,17 +59,45 @@ import {
 import { useAuth } from "@/components/auth/auth-provider"
 import { toolCategories } from "@/lib/navigation"
 
-const activeUser = {
-  name: "Edwing Vera",
-  role: "Ingeniero Civil",
-  initials: "EV",
+function getUserDisplayName(user: User | null): string {
+  const name = user?.user_metadata?.name
+  if (typeof name === "string" && name.trim()) {
+    return name.trim()
+  }
+
+  const email = user?.email?.trim()
+  if (email) {
+    return email.split("@")[0]
+  }
+
+  return "Usuario"
+}
+
+function getUserInitials(name: string): string {
+  const parts = name
+    .trim()
+    .split(/[\s._-]+/)
+    .filter(Boolean)
+
+  if (parts.length === 0) {
+    return "U"
+  }
+
+  return parts
+    .slice(0, 2)
+    .map((part) => part.charAt(0).toUpperCase())
+    .join("")
 }
 
 export function AppSidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const { logout } = useAuth()
+  const { user, logout } = useAuth()
   const { theme, setTheme } = useTheme()
+
+  const userName = getUserDisplayName(user)
+  const userRole = user?.email?.trim() || "Ingeniero Civil"
+  const userInitials = getUserInitials(userName)
 
   return (
     <Sidebar>
@@ -175,19 +204,17 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger render={<SidebarMenuButton size="lg" />}>
                 <Avatar>
-                  <AvatarFallback>{activeUser.initials}</AvatarFallback>
+                  <AvatarFallback>{userInitials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left leading-tight">
-                  <span className="truncate font-medium">
-                    {activeUser.name}
-                  </span>
-                  <span className="truncate text-xs">{activeUser.role}</span>
+                  <span className="truncate font-medium">{userName}</span>
+                  <span className="truncate text-xs">{userRole}</span>
                 </div>
                 <Ellipsis />
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" align="end">
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>{activeUser.name}</DropdownMenuLabel>
+                  <DropdownMenuLabel>{userName}</DropdownMenuLabel>
                   <DropdownMenuItem render={<Link href="/perfil" />}>
                     <UserRound />
                     Mi Cuenta

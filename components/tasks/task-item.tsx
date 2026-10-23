@@ -1,7 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { CalendarDays, Loader2, MoreVertical, Pencil, Trash2 } from "lucide-react"
+import {
+  CalendarDays,
+  Loader2,
+  MoreVertical,
+  Pencil,
+  Trash2,
+} from "lucide-react"
 
 import { TaskEditDialog } from "@/components/tasks/task-edit-dialog"
 import { Badge } from "@/components/ui/badge"
@@ -22,6 +28,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { DATE_DAY_MONTH_OPTIONS, formatDate } from "@/lib/format/date"
 import { cn } from "@/lib/utils"
 import { deleteTask, toggleTaskStatus } from "@/lib/tasks"
 import type { Task, TaskPriority, TaskStatus } from "@/lib/types/task"
@@ -39,19 +46,19 @@ const PRIORITY_COLORS: Record<TaskPriority, string> = {
   high: "bg-red-500/15 text-red-600 dark:text-red-400",
 }
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr + "T00:00:00").toLocaleDateString("es-VE", {
-    day: "2-digit",
-    month: "short",
-  })
-}
-
 type TaskItemProps = {
   task: Task
   onChanged: () => void
+  readOnly?: boolean
+  onError?: (message: string | null) => void
 }
 
-export function TaskItem({ task, onChanged }: TaskItemProps) {
+export function TaskItem({
+  task,
+  onChanged,
+  readOnly = false,
+  onError,
+}: TaskItemProps) {
   const [isToggling, setIsToggling] = useState(false)
   const [showEdit, setShowEdit] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -61,10 +68,19 @@ export function TaskItem({ task, onChanged }: TaskItemProps) {
   const isCompleted = task.status === "completed"
 
   const handleToggle = async () => {
+    if (readOnly) return
+
+    onError?.(null)
     setIsToggling(true)
     const { error } = await toggleTaskStatus(task)
     setIsToggling(false)
-    if (!error) onChanged()
+
+    if (error) {
+      onError?.(error)
+      return
+    }
+
+    onChanged()
   }
 
   const handleDelete = async () => {
@@ -79,6 +95,7 @@ export function TaskItem({ task, onChanged }: TaskItemProps) {
     }
 
     setShowDeleteConfirm(false)
+    onError?.(null)
     onChanged()
   }
 
@@ -87,9 +104,11 @@ export function TaskItem({ task, onChanged }: TaskItemProps) {
       <div className="flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors hover:bg-muted/50">
         <Checkbox
           checked={isCompleted}
-          disabled={isToggling}
+          disabled={isToggling || readOnly}
           onCheckedChange={handleToggle}
-          aria-label={isCompleted ? "Marcar como pendiente" : "Marcar como completada"}
+          aria-label={
+            isCompleted ? "Marcar como pendiente" : "Marcar como completada"
+          }
         />
         <div className="flex flex-1 flex-col gap-0.5">
           <span
@@ -101,85 +120,106 @@ export function TaskItem({ task, onChanged }: TaskItemProps) {
             {task.title}
           </span>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary" className={cn("text-[10px]", STATUS_COLORS[task.status])}>
+            <Badge
+              variant="secondary"
+              className={cn("text-[10px]", STATUS_COLORS[task.status])}
+            >
               {TASK_STATUS_LABELS[task.status]}
             </Badge>
-            <Badge variant="secondary" className={cn("text-[10px]", PRIORITY_COLORS[task.priority])}>
+            <Badge
+              variant="secondary"
+              className={cn("text-[10px]", PRIORITY_COLORS[task.priority])}
+            >
               {TASK_PRIORITY_LABELS[task.priority]}
             </Badge>
             {task.due_date && (
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
                 <CalendarDays className="size-3" />
-                {formatDate(task.due_date)}
+                {formatDate(task.due_date, DATE_DAY_MONTH_OPTIONS)}
               </span>
             )}
           </div>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button variant="ghost" size="icon-sm" />
-            }
-          >
-            <MoreVertical className="size-4" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => handleToggle()}
-              disabled={isToggling}
+        {!readOnly && (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" size="icon-sm" />}
             >
-              {isCompleted ? "Marcar pendiente" : "Marcar completada"}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setShowEdit(true)}>
-              <Pencil className="size-4" />
-              Editar
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => setShowDeleteConfirm(true)}
-            >
-              <Trash2 className="size-4" />
-              Eliminar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <MoreVertical className="size-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => handleToggle()}
+                disabled={isToggling}
+              >
+                {isCompleted ? "Marcar pendiente" : "Marcar completada"}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setShowEdit(true)}>
+                <Pencil className="size-4" />
+                Editar
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                <Trash2 className="size-4" />
+                Eliminar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
-      <TaskEditDialog
-        task={task}
-        open={showEdit}
-        onOpenChange={setShowEdit}
-        onTaskUpdated={onChanged}
-      />
+      {!readOnly && (
+        <TaskEditDialog
+          task={task}
+          open={showEdit}
+          onOpenChange={setShowEdit}
+          onTaskUpdated={onChanged}
+        />
+      )}
 
       {/* Delete confirmation dialog */}
-      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Eliminar tarea</DialogTitle>
-            <DialogDescription>
-              ¿Estás seguro de que quieres eliminar <strong>{task.title}</strong>? Esta acción no se puede deshacer.
-            </DialogDescription>
-          </DialogHeader>
-          {deleteError && <p className="text-sm text-destructive">{deleteError}</p>}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Eliminando...
-                </>
-              ) : (
-                "Eliminar"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {!readOnly && (
+        <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+          <DialogContent className="sm:max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Eliminar tarea</DialogTitle>
+              <DialogDescription>
+                ¿Estás seguro de que quieres eliminar{" "}
+                <strong>{task.title}</strong>? Esta acción no se puede deshacer.
+              </DialogDescription>
+            </DialogHeader>
+            {deleteError && (
+              <p className="text-sm text-destructive">{deleteError}</p>
+            )}
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isDeleting}
+              >
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Eliminando...
+                  </>
+                ) : (
+                  "Eliminar"
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   )
 }
