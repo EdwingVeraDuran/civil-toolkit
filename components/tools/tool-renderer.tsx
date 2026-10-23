@@ -4,6 +4,7 @@ import type { ComponentType } from "react"
 
 import { AreaCalculator } from "@/components/tools/area-calculator"
 import { AiuLaborCost } from "@/components/tools/aiu-labor-cost"
+import { AtterbergLimits } from "@/components/tools/atterberg-limits"
 import { BeamSizing } from "@/components/tools/beam-sizing"
 import { BearingAzimuth } from "@/components/tools/bearing-azimuth"
 import { CoordinatesArea } from "@/components/tools/coordinates-area"
@@ -24,6 +25,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType<ToolComponentProps>> = {
   "load-combinations": LoadCombinations,
   "rebar-schedule": RebarSchedule,
   "soil-phase-relationships": SoilPhaseRelationships,
+  "atterberg-limits": AtterbergLimits,
   "bearing-azimuth": BearingAzimuth,
   "coordinates-area": CoordinatesArea,
   "aiu-labor-cost": AiuLaborCost,

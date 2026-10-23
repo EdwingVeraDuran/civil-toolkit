@@ -2,6 +2,7 @@ import {
   ChartSpline,
   Combine,
   Compass,
+  FlaskConical,
   HandCoins,
   Landmark,
   LandPlot,
@@ -82,6 +83,17 @@ export const soilPhaseRelationshipsInfo: ToolInfo = {
   reference: "Mecánica de suelos — relaciones fundamentales de fase",
 }
 
+export const atterbergLimitsInfo: ToolInfo = {
+  id: "atterberg-limits",
+  name: "Límites de Atterberg (LL, LP, IP)",
+  description:
+    "Procesa los datos del ensayo para hallar límite líquido, límite plástico e índice de plasticidad, y los ubica en la carta de plasticidad. Regresión del ensayo y clasificación.",
+  category: "suelos",
+  icon: FlaskConical,
+  reference:
+    "NTC 4630 (ASTM D4318) — límites de Atterberg; ASTM D2487 / NTC 1504 — clasificación SUCS; carta de plasticidad de Casagrande",
+}
+
 export const bearingAzimuthInfo: ToolInfo = {
   id: "bearing-azimuth",
   name: "Conversión de rumbos y azimuts",
@@ -132,6 +144,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   loadCombinationsInfo,
   rebarScheduleInfo,
   soilPhaseRelationshipsInfo,
+  atterbergLimitsInfo,
   bearingAzimuthInfo,
   coordinatesAreaInfo,
   aiuLaborCostInfo,
