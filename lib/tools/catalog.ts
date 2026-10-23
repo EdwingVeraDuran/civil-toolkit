@@ -1,4 +1,4 @@
-import { Landmark, Ruler, Shapes, TrendingUp } from "lucide-react"
+import { ChartSpline, Landmark, Ruler, Shapes, TrendingUp } from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
 
 export const unitConverterInfo: ToolInfo = {
@@ -18,6 +18,16 @@ export const areaCalculatorInfo: ToolInfo = {
   category: "general",
   icon: Shapes,
   reference: "Geometría básica — sin verificación normativa",
+}
+
+export const interpolationCalculatorInfo: ToolInfo = {
+  id: "interpolation-calculator",
+  name: "Interpolación lineal y doble",
+  description:
+    "Interpola valores entre dos puntos conocidos o dentro de una tabla 2×2 mediante interpolación lineal y bilineal.",
+  category: "general",
+  icon: ChartSpline,
+  reference: "Interpolación numérica — sin verificación normativa",
 }
 
 export const beamSizingInfo: ToolInfo = {
@@ -44,6 +54,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   unitConverterInfo,
   areaCalculatorInfo,
   slopeCalculatorInfo,
+  interpolationCalculatorInfo,
   beamSizingInfo,
 ]
 
