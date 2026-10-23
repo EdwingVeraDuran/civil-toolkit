@@ -45,8 +45,7 @@ export function TaskList({
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId])
+  }, [projectId, onTasksChanged])
 
   const handleCreate = async () => {
     const title = newTitle.trim()
