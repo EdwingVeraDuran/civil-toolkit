@@ -40,6 +40,11 @@ const cases: Record<string, Case[]> = {
     { from: 1, fromUnit: "mpa", toUnit: "kpa", expected: 1000 },
     { from: 1, fromUnit: "bar", toUnit: "pa", expected: 100000 },
   ],
+  "peso unitario": [
+    { from: 1, fromUnit: "tfm3", toUnit: "knm3", expected: 9.80665 },
+    { from: 1, fromUnit: "pcf", toUnit: "knm3", expected: 0.1570874638462462 },
+    { from: 1, fromUnit: "knm3", toUnit: "mnm3", expected: 0.001 },
+  ],
   angulo: [
     { from: 180, fromUnit: "deg", toUnit: "rad", expected: Math.PI },
     { from: 200, fromUnit: "grad", toUnit: "deg", expected: 180 },

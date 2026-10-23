@@ -1,11 +1,18 @@
-import { ChartSpline, Landmark, Ruler, Shapes, TrendingUp } from "lucide-react"
+import {
+  ChartSpline,
+  Landmark,
+  Ruler,
+  Scale,
+  Shapes,
+  TrendingUp,
+} from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
 
 export const unitConverterInfo: ToolInfo = {
   id: "unit-converter",
   name: "Conversor de unidades",
   description:
-    "Convierte entre unidades de longitud, área, volumen, masa, fuerza, presión, ángulo y temperatura.",
+    "Convierte entre unidades de longitud, área, volumen, masa, fuerza, presión, peso unitario, ángulo y temperatura.",
   category: "general",
   icon: Ruler,
 }
@@ -40,6 +47,16 @@ export const beamSizingInfo: ToolInfo = {
   reference: "NSR-10, Título C — Concreto estructural",
 }
 
+export const soilPhaseRelationshipsInfo: ToolInfo = {
+  id: "soil-phase-relationships",
+  name: "Relaciones volumétricas y gravimétricas",
+  description:
+    "Calcula e, n, S, γ y w, además de γd, γsat y γ', a partir de pares de datos conocidos y Gs.",
+  category: "suelos",
+  icon: Scale,
+  reference: "Mecánica de suelos — relaciones fundamentales de fase",
+}
+
 export const slopeCalculatorInfo: ToolInfo = {
   id: "slope-calculator",
   name: "Calculadora de pendientes",
@@ -56,6 +73,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   slopeCalculatorInfo,
   interpolationCalculatorInfo,
   beamSizingInfo,
+  soilPhaseRelationshipsInfo,
 ]
 
 export function getToolInfo(id: string): ToolInfo | undefined {

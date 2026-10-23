@@ -56,6 +56,7 @@ const DIMENSION_DEFAULTS: Record<DimensionId, { from: UnitId; to: UnitId }> = {
   mass: { from: "kg", to: "lb" },
   force: { from: "n", to: "kn" },
   pressure: { from: "mpa", to: "psi" },
+  unitWeight: { from: "knm3", to: "pcf" },
   angle: { from: "deg", to: "rad" },
   temperature: { from: "c", to: "f" },
 }

@@ -5,6 +5,7 @@ export const DIMENSIONS = [
   "mass",
   "force",
   "pressure",
+  "unitWeight",
   "angle",
   "temperature",
 ] as const
@@ -18,6 +19,7 @@ export const DIMENSION_LABELS: Record<DimensionId, string> = {
   mass: "Masa",
   force: "Fuerza",
   pressure: "Presión / Esfuerzo",
+  unitWeight: "Peso unitario",
   angle: "Ángulo",
   temperature: "Temperatura",
 }

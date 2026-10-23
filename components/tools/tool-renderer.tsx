@@ -6,6 +6,7 @@ import { AreaCalculator } from "@/components/tools/area-calculator"
 import { BeamSizing } from "@/components/tools/beam-sizing"
 import { InterpolationCalculator } from "@/components/tools/interpolation-calculator"
 import { SlopeCalculator } from "@/components/tools/slope-calculator"
+import { SoilPhaseRelationships } from "@/components/tools/soil-phase-relationships"
 import { UnitConverter } from "@/components/tools/unit-converter"
 import type { EditMode, ToolComponentProps } from "@/lib/tools/types"
 
@@ -15,6 +16,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType<ToolComponentProps>> = {
   "slope-calculator": SlopeCalculator,
   "interpolation-calculator": InterpolationCalculator,
   "beam-sizing": BeamSizing,
+  "soil-phase-relationships": SoilPhaseRelationships,
 }
 
 export function ToolRenderer({

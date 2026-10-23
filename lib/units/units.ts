@@ -61,6 +61,15 @@ export const UNITS = {
   psf: { id: "psf", symbol: "psf", name: "Libra por pie²", dimension: "pressure", factor: 47.88025898033584 },
   ksf: { id: "ksf", symbol: "ksf", name: "Kilolibra por pie²", dimension: "pressure", factor: 47880.25898033584 },
 
+  // Peso unitario (base: kilonewton por metro cúbico)
+  knm3: { id: "knm3", symbol: "kN/m³", name: "Kilonewton por metro cúbico", dimension: "unitWeight", factor: 1 },
+  nm3: { id: "nm3", symbol: "N/m³", name: "Newton por metro cúbico", dimension: "unitWeight", factor: 0.001 },
+  mnm3: { id: "mnm3", symbol: "MN/m³", name: "Meganewton por metro cúbico", dimension: "unitWeight", factor: 1000 },
+  tfm3: { id: "tfm3", symbol: "tf/m³", name: "Tonelada-fuerza por metro cúbico", dimension: "unitWeight", factor: 9.80665 },
+  kgfm3: { id: "kgfm3", symbol: "kgf/m³", name: "Kilogramo-fuerza por metro cúbico", dimension: "unitWeight", factor: 0.00980665 },
+  pcf: { id: "pcf", symbol: "lb/ft³", name: "Libra por pie cúbico", dimension: "unitWeight", factor: 0.1570874638462462 },
+  kcf: { id: "kcf", symbol: "kip/ft³", name: "Kip por pie cúbico", dimension: "unitWeight", factor: 157.0874638462462 },
+
   // Ángulo (base: radián)
   rad: { id: "rad", symbol: "rad", name: "Radián", dimension: "angle", factor: 1 },
   deg: { id: "deg", symbol: "°", name: "Grado sexagesimal", dimension: "angle", factor: Math.PI / 180 },
