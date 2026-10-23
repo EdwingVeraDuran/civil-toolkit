@@ -7,6 +7,7 @@ import {
   Ruler,
   Scale,
   Shapes,
+  TableProperties,
   TrendingUp,
 } from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
@@ -60,6 +61,16 @@ export const loadCombinationsInfo: ToolInfo = {
   reference: "NSR-10, B.2.4.2 — Tabla B.2-3 (combinaciones mayoradas)",
 }
 
+export const rebarScheduleInfo: ToolInfo = {
+  id: "rebar-schedule",
+  name: "Despiece y cuantía de acero, tabla de pesos de varillas",
+  description:
+    "Calcula longitudes, pesos y cuantía del refuerzo a partir del despiece, con la tabla de varillas comerciales.",
+  category: "estructuras",
+  icon: TableProperties,
+  reference: "NSR-10, C.3.5.3 — Tablas C.3.5.3-1 y C.3.5.3-2; NTC 2289",
+}
+
 export const soilPhaseRelationshipsInfo: ToolInfo = {
   id: "soil-phase-relationships",
   name: "Relaciones volumétricas y gravimétricas",
@@ -107,6 +118,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   interpolationCalculatorInfo,
   beamSizingInfo,
   loadCombinationsInfo,
+  rebarScheduleInfo,
   soilPhaseRelationshipsInfo,
   bearingAzimuthInfo,
   coordinatesAreaInfo,
