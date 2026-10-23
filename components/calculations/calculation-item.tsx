@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import { Loader2, Pencil, Trash2 } from "lucide-react"
 import Link from "next/link"
 
+import { CalculationReportDialog } from "@/components/calculations/calculation-report-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -64,6 +65,12 @@ export function CalculationItem({
     [projects]
   )
 
+  const projectName =
+    currentProjectId === null
+      ? NO_PROJECT_LABEL
+      : (projects.find((project) => project.id === currentProjectId)?.name ??
+        "Proyecto no disponible")
+
   const handleMove = async (next: string | null) => {
     if (!next) return
 
@@ -117,6 +124,12 @@ export function CalculationItem({
           </div>
 
           <div className="flex items-center gap-1">
+            <CalculationReportDialog
+              calculationId={calculation.id}
+              title={calculation.title}
+              projectName={projectName}
+            />
+
             {tool ? (
               <Button
                 variant="ghost"
