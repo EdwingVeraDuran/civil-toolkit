@@ -29,6 +29,7 @@ import {
 } from "@/lib/aguas/canales"
 import type { OpenChannelFlowResult } from "@/lib/tools/open-channel-flow/calculate"
 import { openChannelFlowDefinition } from "@/lib/tools/open-channel-flow/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   CHANNEL_MODE_DESCRIPTIONS,
   CHANNEL_MODE_LABELS,
@@ -486,34 +487,23 @@ export function OpenChannelFlow({
       ? { ...common, mode, discharge: dischargeInput }
       : { ...common, mode, depth: depthInput }
 
-  const validation = openChannelFlowDefinition.validate(rawInput)
+  const {
+    validation,
+    parsedInput,
+    result,
+    snapshot: evaluatedSnapshot,
+    calculationError,
+  } = evaluateTool(openChannelFlowDefinition, rawInput, {
+    calculationErrorMessage:
+      "No se pudo calcular el canal con los datos suministrados.",
+  })
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
 
-  const parsedInput = validation.valid
-    ? openChannelFlowDefinition.schema.parse(rawInput)
-    : null
-
-  let result: OpenChannelFlowResult | null = null
-  let calculationError: string | null = null
-
-  if (parsedInput) {
-    try {
-      result = openChannelFlowDefinition.calculate(parsedInput)
-    } catch (error) {
-      calculationError =
-        error instanceof Error
-          ? error.message
-          : "No se pudo calcular el canal con los datos suministrados."
-    }
-  }
-
   const snapshot =
-    parsedInput && result && result.normalDepth !== null
-      ? openChannelFlowDefinition.toSnapshot(parsedInput, result)
-      : null
+    result && result.normalDepth !== null ? evaluatedSnapshot : null
 
   return (
     <div className="flex flex-col gap-6">

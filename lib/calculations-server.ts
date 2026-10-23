@@ -1,12 +1,15 @@
 import { createClient } from "@/lib/supabase/server"
-import type { Calculation } from "@/lib/types/calculation"
+import type { Calculation, CalculationListItem } from "@/lib/types/calculation"
 
-export async function getAllCalculations(): Promise<Calculation[]> {
+const CALCULATION_LIST_COLUMNS =
+  "id, project_id, tool_id, title, summary, created_at"
+
+export async function getAllCalculations(): Promise<CalculationListItem[]> {
   const supabase = await createClient()
 
   const { data, error } = await supabase
     .from("calculations")
-    .select("*")
+    .select(CALCULATION_LIST_COLUMNS)
     .order("created_at", { ascending: false })
 
   if (error) {
@@ -18,13 +21,13 @@ export async function getAllCalculations(): Promise<Calculation[]> {
 }
 
 export async function getCalculationsByProject(
-  projectId: string,
-): Promise<Calculation[]> {
+  projectId: string
+): Promise<CalculationListItem[]> {
   const supabase = await createClient()
 
   const { data, error } = await supabase
     .from("calculations")
-    .select("*")
+    .select(CALCULATION_LIST_COLUMNS)
     .eq("project_id", projectId)
     .order("created_at", { ascending: false })
 
@@ -37,7 +40,7 @@ export async function getCalculationsByProject(
 }
 
 export async function getCalculationById(
-  calculationId: string,
+  calculationId: string
 ): Promise<Calculation | null> {
   const supabase = await createClient()
 

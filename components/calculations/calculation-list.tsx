@@ -13,13 +13,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { NO_PROJECT, NO_PROJECT_LABEL } from "@/lib/types/calculation"
-import type { Calculation } from "@/lib/types/calculation"
+import type { CalculationListItem } from "@/lib/types/calculation"
 import type { Project } from "@/lib/types/project"
 
 const ALL = "all"
 
 type CalculationListProps = {
-  calculations: Calculation[]
+  calculations: CalculationListItem[]
   projects: Project[]
   showFilter?: boolean
 }
@@ -36,18 +36,23 @@ export function CalculationList({
     () => [
       { value: ALL, label: "Todos" },
       { value: NO_PROJECT, label: NO_PROJECT_LABEL },
-      ...projects.map((project) => ({ value: project.id, label: project.name })),
+      ...projects.map((project) => ({
+        value: project.id,
+        label: project.name,
+      })),
     ],
-    [projects],
+    [projects]
   )
 
   const filteredCalculations = useMemo(() => {
     if (!showFilter || projectFilter === ALL) return calculations
     if (projectFilter === NO_PROJECT) {
-      return calculations.filter((calculation) => calculation.project_id === null)
+      return calculations.filter(
+        (calculation) => calculation.project_id === null
+      )
     }
     return calculations.filter(
-      (calculation) => calculation.project_id === projectFilter,
+      (calculation) => calculation.project_id === projectFilter
     )
   }, [calculations, projectFilter, showFilter])
 

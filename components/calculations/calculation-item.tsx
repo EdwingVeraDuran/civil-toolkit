@@ -27,11 +27,11 @@ import { deleteCalculation, updateCalculationProject } from "@/lib/calculations"
 import { formatDate } from "@/lib/format/date"
 import { getToolInfo } from "@/lib/tools/catalog"
 import { NO_PROJECT, NO_PROJECT_LABEL } from "@/lib/types/calculation"
-import type { Calculation } from "@/lib/types/calculation"
+import type { CalculationListItem } from "@/lib/types/calculation"
 import type { Project } from "@/lib/types/project"
 
 type CalculationItemProps = {
-  calculation: Calculation
+  calculation: CalculationListItem
   projects: Project[]
   onChanged: () => void
 }

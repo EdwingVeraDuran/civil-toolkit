@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select"
 import type { SlopeDirectionResult } from "@/lib/tools/slope-calculator/calculate"
 import { slopeCalculatorDefinition } from "@/lib/tools/slope-calculator/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   SLOPE_DIRECTIONS,
   SLOPE_FORMATS,
@@ -249,24 +250,14 @@ export function SlopeCalculator({
             elevationUnit,
           }
 
-  const validation = slopeCalculatorDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    slopeCalculatorDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? slopeCalculatorDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? slopeCalculatorDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? slopeCalculatorDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const runError = fieldError("run")
   const riseError = fieldError("rise")

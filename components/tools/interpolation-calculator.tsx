@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { interpolationCalculatorDefinition } from "@/lib/tools/interpolation-calculator/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   INTERPOLATION_MODES,
   INTERPOLATION_MODE_LABELS,
@@ -284,24 +285,14 @@ export function InterpolationCalculator({
           targetY: doubleTargetYInput,
         }
 
-  const validation = interpolationCalculatorDefinition.validate(rawInput)
+  const { validation, parsedInput, result, snapshot } = evaluateTool(
+    interpolationCalculatorDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? interpolationCalculatorDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? interpolationCalculatorDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? interpolationCalculatorDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const linearInput = parsedInput?.mode === "linear" ? parsedInput : null
   const doubleInput = parsedInput?.mode === "double" ? parsedInput : null

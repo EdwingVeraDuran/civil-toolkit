@@ -33,10 +33,15 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatNumber } from "@/lib/units/format"
-import { DIMENSION_LABELS, DIMENSIONS, type DimensionId } from "@/lib/units/types"
+import {
+  DIMENSION_LABELS,
+  DIMENSIONS,
+  type DimensionId,
+} from "@/lib/units/types"
 import type { UnitId } from "@/lib/units/units"
 import { unitsByDimension } from "@/lib/units/units"
 import { unitConverterDefinition } from "@/lib/tools/unit-converter/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import type { ToolComponentProps } from "@/lib/tools/types"
 
 const DECIMAL_ITEMS = [0, 1, 2, 3, 4, 6].map((n) => ({
@@ -75,7 +80,7 @@ function getDimensionFromUnit(unitId: string): DimensionId | null {
 }
 
 function hydrateUnitConverterInitialInput(
-  initialInput?: Record<string, unknown>,
+  initialInput?: Record<string, unknown>
 ) {
   if (!initialInput) return null
 
@@ -98,7 +103,7 @@ function hydrateUnitConverterInitialInput(
 export function UnitConverter({ initialInput, editMode }: ToolComponentProps) {
   const hydrated = hydrateUnitConverterInitialInput(initialInput)
   const [dimension, setDimension] = useState<DimensionId>(
-    hydrated?.dimension ?? "length",
+    hydrated?.dimension ?? "length"
   )
   const [fromUnitId, setFromUnitId] = useState(hydrated?.fromUnitId ?? "m")
   const [toUnitId, setToUnitId] = useState(hydrated?.toUnitId ?? "ft")
@@ -109,23 +114,13 @@ export function UnitConverter({ initialInput, editMode }: ToolComponentProps) {
 
   const rawInput = { value: valueInput, fromUnitId, toUnitId }
 
-  const validation = unitConverterDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    unitConverterDefinition,
+    rawInput
+  )
   const valueError = validation.valid
     ? undefined
     : validation.errors.find((error) => error.field === "value")?.message
-
-  const parsedInput = validation.valid
-    ? unitConverterDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? unitConverterDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? unitConverterDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const handleDimensionChange = (next: string | null) => {
     if (!next || !isDimensionId(next)) {
@@ -147,7 +142,9 @@ export function UnitConverter({ initialInput, editMode }: ToolComponentProps) {
       <Card>
         <CardHeader>
           <CardTitle>Conversión</CardTitle>
-          <CardDescription>Elige la magnitud y las unidades a convertir.</CardDescription>
+          <CardDescription>
+            Elige la magnitud y las unidades a convertir.
+          </CardDescription>
           <CardAction>
             <div className="w-48">
               <Select
@@ -283,7 +280,9 @@ export function UnitConverter({ initialInput, editMode }: ToolComponentProps) {
                         : undefined
                     }
                   >
-                    <TableCell className="font-medium">{row.unit.symbol}</TableCell>
+                    <TableCell className="font-medium">
+                      {row.unit.symbol}
+                    </TableCell>
                     <TableCell className="hidden text-muted-foreground sm:table-cell">
                       {row.unit.name}
                     </TableCell>

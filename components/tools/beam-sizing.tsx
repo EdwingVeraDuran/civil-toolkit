@@ -34,6 +34,7 @@ import {
   type SupportCondition,
 } from "@/lib/estructuras/nsr10"
 import { beamSizingDefinition } from "@/lib/tools/beam-sizing/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import type { ToolComponentProps } from "@/lib/tools/types"
 
 const BOOLEAN_ITEMS = [
@@ -112,9 +113,7 @@ function SelectField({
   )
 }
 
-function hydrateBeamSizingInitialInput(
-  initialInput?: Record<string, unknown>,
-) {
+function hydrateBeamSizingInitialInput(initialInput?: Record<string, unknown>) {
   if (!initialInput) return null
 
   const readString = (value: unknown, fallback: string) =>
@@ -132,14 +131,14 @@ function hydrateBeamSizingInitialInput(
   const supportCondition =
     typeof initialInput.supportCondition === "string" &&
     (SUPPORT_CONDITIONS as readonly string[]).includes(
-      initialInput.supportCondition,
+      initialInput.supportCondition
     )
       ? (initialInput.supportCondition as SupportCondition)
       : "simple"
   const capacity =
     typeof initialInput.capacity === "string" &&
     (DISSIPATION_CAPACITIES as readonly string[]).includes(
-      initialInput.capacity,
+      initialInput.capacity
     )
       ? (initialInput.capacity as DissipationCapacity)
       : "DES"
@@ -159,20 +158,22 @@ function hydrateBeamSizingInitialInput(
 export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
   const hydrated = hydrateBeamSizingInitialInput(initialInput)
   const [elementType, setElementType] = useState<ElementType>(
-    hydrated?.elementType ?? "viga",
+    hydrated?.elementType ?? "viga"
   )
   const [supportCondition, setSupportCondition] = useState<SupportCondition>(
-    hydrated?.supportCondition ?? "simple",
+    hydrated?.supportCondition ?? "simple"
   )
   const [capacity, setCapacity] = useState<DissipationCapacity>(
-    hydrated?.capacity ?? "DES",
+    hydrated?.capacity ?? "DES"
   )
   const [spanInput, setSpanInput] = useState(hydrated?.spanInput ?? "6")
   const [fyInput, setFyInput] = useState(hydrated?.fyInput ?? "420")
   const [lightweight, setLightweight] = useState(hydrated?.lightweight ?? false)
-  const [densityInput, setDensityInput] = useState(hydrated?.densityInput ?? "1800")
+  const [densityInput, setDensityInput] = useState(
+    hydrated?.densityInput ?? "1800"
+  )
   const [fragilePartitions, setFragilePartitions] = useState(
-    hydrated?.fragilePartitions ?? false,
+    hydrated?.fragilePartitions ?? false
   )
 
   const rawInput = {
@@ -186,22 +187,14 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
     fragilePartitions,
   }
 
-  const validation = beamSizingDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    beamSizingDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? beamSizingDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput ? beamSizingDefinition.calculate(parsedInput) : null
-
-  const snapshot =
-    parsedInput && result
-      ? beamSizingDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const spanError = fieldError("span")
   const fyError = fieldError("fy")
@@ -244,7 +237,9 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
               onChange={(event) => setSpanInput(event.target.value)}
               aria-invalid={spanError ? true : undefined}
             />
-            {spanError ? <p className="text-sm text-destructive">{spanError}</p> : null}
+            {spanError ? (
+              <p className="text-sm text-destructive">{spanError}</p>
+            ) : null}
           </div>
           <div className="space-y-2">
             <Label htmlFor="fy">fy (MPa)</Label>
@@ -255,7 +250,9 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
               onChange={(event) => setFyInput(event.target.value)}
               aria-invalid={fyError ? true : undefined}
             />
-            {fyError ? <p className="text-sm text-destructive">{fyError}</p> : null}
+            {fyError ? (
+              <p className="text-sm text-destructive">{fyError}</p>
+            ) : null}
           </div>
           <SelectField
             id="fragile-partitions"
@@ -282,7 +279,9 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
           />
           {lightweight ? (
             <div className="space-y-2">
-              <Label htmlFor="density">Densidad del concreto liviano (kg/m³)</Label>
+              <Label htmlFor="density">
+                Densidad del concreto liviano (kg/m³)
+              </Label>
               <Input
                 id="density"
                 inputMode="decimal"
@@ -317,19 +316,33 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
               />
               <dl className="space-y-4">
                 <div className="flex items-baseline justify-between gap-4">
-                  <dt className="text-sm text-muted-foreground">Peralte mínimo (exacto)</dt>
-                  <dd className="text-sm font-medium tabular-nums">{formatMm(result.hMinExact)}</dd>
+                  <dt className="text-sm text-muted-foreground">
+                    Peralte mínimo (exacto)
+                  </dt>
+                  <dd className="text-sm font-medium tabular-nums">
+                    {formatMm(result.hMinExact)}
+                  </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-4">
-                  <dt className="text-sm text-muted-foreground">Peralte redondeado (50 mm)</dt>
-                  <dd className="text-sm font-medium tabular-nums">{formatMm(result.h)}</dd>
+                  <dt className="text-sm text-muted-foreground">
+                    Peralte redondeado (50 mm)
+                  </dt>
+                  <dd className="text-sm font-medium tabular-nums">
+                    {formatMm(result.h)}
+                  </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-4">
-                  <dt className="text-sm text-muted-foreground">Ancho mínimo</dt>
-                  <dd className="text-sm font-medium tabular-nums">{formatMm(result.bMin)}</dd>
+                  <dt className="text-sm text-muted-foreground">
+                    Ancho mínimo
+                  </dt>
+                  <dd className="text-sm font-medium tabular-nums">
+                    {formatMm(result.bMin)}
+                  </dd>
                 </div>
                 <div className="space-y-1 border-t pt-4">
-                  <p className="text-sm text-muted-foreground">Sección recomendada</p>
+                  <p className="text-sm text-muted-foreground">
+                    Sección recomendada
+                  </p>
                   <p className="text-xl font-semibold tabular-nums">
                     {result.b} × {result.h} mm
                   </p>
@@ -345,7 +358,9 @@ export function BeamSizing({ initialInput, editMode }: ToolComponentProps) {
       <Card>
         <CardHeader>
           <CardTitle>Referencias y notas</CardTitle>
-          <CardDescription>Basado en la NSR-10, Título C — Concreto estructural.</CardDescription>
+          <CardDescription>
+            Basado en la NSR-10, Título C — Concreto estructural.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {result ? (

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select"
 import { parseNumericInput } from "@/lib/tools/parse-numeric"
 import { soilPhaseRelationshipsDefinition } from "@/lib/tools/soil-phase-relationships/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   DEFAULT_FORCE_UNIT,
   DEFAULT_UNIT_WEIGHT_UNIT,
@@ -373,24 +374,14 @@ export function SoilPhaseRelationships({
     }
   })()
 
-  const validation = soilPhaseRelationshipsDefinition.validate(rawInput)
+  const { validation, parsedInput, result, snapshot } = evaluateTool(
+    soilPhaseRelationshipsDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? soilPhaseRelationshipsDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? soilPhaseRelationshipsDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? soilPhaseRelationshipsDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const unitWeightSymbol = getUnit(unitWeightUnitId)?.symbol ?? "kN/m³"
   const displayedUnitWeight =

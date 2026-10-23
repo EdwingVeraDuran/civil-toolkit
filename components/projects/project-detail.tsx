@@ -29,7 +29,7 @@ import {
   formatDate,
 } from "@/lib/format/date"
 import { cn } from "@/lib/utils"
-import type { Calculation } from "@/lib/types/calculation"
+import type { CalculationListItem } from "@/lib/types/calculation"
 import type { Project, ProjectStatus } from "@/lib/types/project"
 import { PROJECT_STATUS_LABELS } from "@/lib/types/project"
 
@@ -61,7 +61,7 @@ function InfoRow({
 
 type ProjectDetailProps = {
   project: Project
-  calculations: Calculation[]
+  calculations: CalculationListItem[]
   projects: Project[]
 }
 

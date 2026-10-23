@@ -34,11 +34,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  calculateCoordinatesArea,
-  type CoordinatesAreaResult,
-} from "@/lib/tools/coordinates-area/calculate"
 import { coordinatesAreaDefinition } from "@/lib/tools/coordinates-area/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   parseCoordinateList,
   type ParsedVertex,
@@ -47,7 +44,6 @@ import {
   DEFAULT_AREA_UNIT,
   DEFAULT_LENGTH_UNIT,
   MAX_VERTICES,
-  type CoordinatesAreaInput,
 } from "@/lib/tools/coordinates-area/schema"
 import { parseNumericInput } from "@/lib/tools/parse-numeric"
 import type { ToolComponentProps } from "@/lib/tools/types"
@@ -322,24 +318,14 @@ export function CoordinatesArea({
     })),
   }
 
-  const validation = coordinatesAreaDefinition.validate(rawInput)
+  const { validation, parsedInput, result, snapshot } = evaluateTool(
+    coordinatesAreaDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput: CoordinatesAreaInput | null = validation.valid
-    ? coordinatesAreaDefinition.schema.parse(rawInput)
-    : null
-
-  const result: CoordinatesAreaResult | null = parsedInput
-    ? calculateCoordinatesArea(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? coordinatesAreaDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const lengthSymbol = getUnit(lengthUnit)?.symbol ?? "m"
   const areaSymbol = result

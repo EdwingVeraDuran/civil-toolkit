@@ -36,6 +36,7 @@ import {
   LOAD_COMBINATION_REFERENCES,
 } from "@/lib/estructuras/nsr10-load-combinations"
 import { loadCombinationsDefinition } from "@/lib/tools/load-combinations/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   DEFAULT_LOAD_UNIT,
   LOAD_UNIT_LABELS,
@@ -202,24 +203,14 @@ export function LoadCombinations({
     seismicAtServiceLevel,
   }
 
-  const validation = loadCombinationsDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    loadCombinationsDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? loadCombinationsDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? loadCombinationsDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? loadCombinationsDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const unitSymbol = LOAD_UNIT_LABELS[unit]
   const deadError = fieldError("deadLoad")

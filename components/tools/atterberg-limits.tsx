@@ -28,8 +28,8 @@ import {
   ATTERBERG_REFERENCES,
   PLASTIC_LIMIT_RANGE_LIMIT,
 } from "@/lib/suelos/atterberg"
-import type { AtterbergLimitsResult } from "@/lib/tools/atterberg-limits/calculate"
 import { atterbergLimitsDefinition } from "@/lib/tools/atterberg-limits/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   MAX_LIQUID_LIMIT_POINTS,
   MAX_PLASTIC_LIMIT_POINTS,
@@ -201,22 +201,14 @@ export function AtterbergLimits({
     plasticLimitValues: plasticLimitRows.map((row) => row.moistureInput),
   }
 
-  const validation = atterbergLimitsDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    atterbergLimitsDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? atterbergLimitsDefinition.schema.parse(rawInput)
-    : null
-  const result: AtterbergLimitsResult | null = parsedInput
-    ? atterbergLimitsDefinition.calculate(parsedInput)
-    : null
-  const snapshot =
-    parsedInput && result
-      ? atterbergLimitsDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const updateLiquidLimitRow = (
     id: number,

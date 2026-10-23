@@ -39,6 +39,7 @@ import {
 } from "@/lib/aguas/tuberias"
 import type { PipeHydraulicsResult } from "@/lib/tools/pipe-hydraulics/calculate"
 import { pipeHydraulicsDefinition } from "@/lib/tools/pipe-hydraulics/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   DEFAULT_PIPE_METHOD,
   DEFAULT_PIPE_MODE,
@@ -739,29 +740,20 @@ export function PipeHydraulics({ initialInput, editMode }: ToolComponentProps) {
             discharge: dischargeInput,
           }
 
-  const validation = pipeHydraulicsDefinition.validate(rawInput)
+  const {
+    validation,
+    parsedInput,
+    result,
+    snapshot: evaluatedSnapshot,
+    calculationError,
+  } = evaluateTool(pipeHydraulicsDefinition, rawInput, {
+    calculationErrorMessage:
+      "No se pudo calcular la tubería con los datos suministrados.",
+  })
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? pipeHydraulicsDefinition.schema.parse(rawInput)
-    : null
-
-  let result: PipeHydraulicsResult | null = null
-  let calculationError: string | null = null
-
-  if (parsedInput) {
-    try {
-      result = pipeHydraulicsDefinition.calculate(parsedInput)
-    } catch (error) {
-      calculationError =
-        error instanceof Error
-          ? error.message
-          : "No se pudo calcular la tubería con los datos suministrados."
-    }
-  }
 
   const hasSolution =
     result !== null &&
@@ -769,10 +761,7 @@ export function PipeHydraulics({ initialInput, editMode }: ToolComponentProps) {
     result.discharge !== null &&
     result.headLoss !== null
 
-  const snapshot =
-    parsedInput && result && hasSolution
-      ? pipeHydraulicsDefinition.toSnapshot(parsedInput, result)
-      : null
+  const snapshot = result && hasSolution ? evaluatedSnapshot : null
 
   const previewTotalK = accessories.reduce((total, row) => {
     const quantity = parsePreviewNumber(row.quantityInput)

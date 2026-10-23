@@ -13,5 +13,10 @@ export type Calculation = {
   updated_at: string
 }
 
+export type CalculationListItem = Pick<
+  Calculation,
+  "id" | "project_id" | "tool_id" | "title" | "summary" | "created_at"
+>
+
 export const NO_PROJECT = "none"
 export const NO_PROJECT_LABEL = "Sin proyecto (independiente)"

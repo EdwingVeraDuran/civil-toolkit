@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { areaCalculatorDefinition } from "@/lib/tools/area-calculator/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   AREA_SHAPES,
   AREA_SHAPE_LABELS,
@@ -268,24 +269,14 @@ export function AreaCalculator({ initialInput, editMode }: ToolComponentProps) {
                   side: polygonSideInput,
                 }
 
-  const validation = areaCalculatorDefinition.validate(rawInput)
+  const { validation, parsedInput, result, snapshot } = evaluateTool(
+    areaCalculatorDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? areaCalculatorDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? areaCalculatorDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? areaCalculatorDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const lengthSymbol = getUnit(lengthUnit)?.symbol ?? "m"
   const areaSymbol = result

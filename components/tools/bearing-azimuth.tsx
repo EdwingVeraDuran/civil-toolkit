@@ -28,6 +28,7 @@ import {
   formatDms,
 } from "@/lib/tools/bearing-azimuth/calculate"
 import { bearingAzimuthDefinition } from "@/lib/tools/bearing-azimuth/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import {
   ANGLE_FORMATS,
   ANGLE_FORMAT_LABELS,
@@ -242,24 +243,14 @@ export function BearingAzimuth({ initialInput, editMode }: ToolComponentProps) {
           seconds: secondsInput,
         }
 
-  const validation = bearingAzimuthDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    bearingAzimuthDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput = validation.valid
-    ? bearingAzimuthDefinition.schema.parse(rawInput)
-    : null
-
-  const result = parsedInput
-    ? bearingAzimuthDefinition.calculate(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? bearingAzimuthDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const isBearing = mode === "bearing-to-azimuth"
 

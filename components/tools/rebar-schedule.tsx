@@ -47,17 +47,13 @@ import {
   type RebarSize,
 } from "@/lib/estructuras/nsr10-rebar"
 import {
-  calculateRebarSchedule,
-  type RebarScheduleResult,
-} from "@/lib/tools/rebar-schedule/calculate"
-import { rebarScheduleDefinition } from "@/lib/tools/rebar-schedule/definition"
-import {
   DEFAULT_REBAR_ID,
   DEFAULT_SECTION_BAR_ID,
   DEFAULT_WASTE_PERCENT,
   MAX_REBAR_ROWS,
-  type RebarScheduleInput,
 } from "@/lib/tools/rebar-schedule/schema"
+import { rebarScheduleDefinition } from "@/lib/tools/rebar-schedule/definition"
+import { evaluateTool } from "@/lib/tools/evaluate"
 import { parseNumericInput } from "@/lib/tools/parse-numeric"
 import type { ToolComponentProps } from "@/lib/tools/types"
 import { formatNumber } from "@/lib/units/format"
@@ -358,24 +354,14 @@ export function RebarSchedule({ initialInput, editMode }: ToolComponentProps) {
     sectionBarCount: sectionBarCountInput,
   }
 
-  const validation = rebarScheduleDefinition.validate(rawInput)
+  const { validation, result, snapshot } = evaluateTool(
+    rebarScheduleDefinition,
+    rawInput
+  )
   const fieldError = (field: string) =>
     validation.valid
       ? undefined
       : validation.errors.find((error) => error.field === field)?.message
-
-  const parsedInput: RebarScheduleInput | null = validation.valid
-    ? rebarScheduleDefinition.schema.parse(rawInput)
-    : null
-
-  const result: RebarScheduleResult | null = parsedInput
-    ? calculateRebarSchedule(parsedInput)
-    : null
-
-  const snapshot =
-    parsedInput && result
-      ? rebarScheduleDefinition.toSnapshot(parsedInput, result)
-      : null
 
   const updateRow = (
     id: number,
