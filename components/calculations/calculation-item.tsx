@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { deleteCalculation, updateCalculationProject } from "@/lib/calculations"
-import { getToolCategorySlug, getToolInfo } from "@/lib/tools/catalog"
+import { getToolInfo } from "@/lib/tools/catalog"
 import { NO_PROJECT, NO_PROJECT_LABEL } from "@/lib/types/calculation"
 import type { Calculation } from "@/lib/types/calculation"
 import type { Project } from "@/lib/types/project"
@@ -48,22 +48,27 @@ export function CalculationItem({
   projects,
   onChanged,
 }: CalculationItemProps) {
-  const [currentProjectId, setCurrentProjectId] = useState(calculation.project_id)
+  const [currentProjectId, setCurrentProjectId] = useState(
+    calculation.project_id
+  )
   const [isMoving, setIsMoving] = useState(false)
   const [moveError, setMoveError] = useState<string | null>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
 
-  const toolName = getToolInfo(calculation.tool_id)?.name ?? calculation.tool_id
-  const categorySlug = getToolCategorySlug(calculation.tool_id)
+  const tool = getToolInfo(calculation.tool_id)
+  const toolName = tool?.name ?? calculation.tool_id
 
   const projectItems = useMemo(
     () => [
       { value: NO_PROJECT, label: NO_PROJECT_LABEL },
-      ...projects.map((project) => ({ value: project.id, label: project.name })),
+      ...projects.map((project) => ({
+        value: project.id,
+        label: project.name,
+      })),
     ],
-    [projects],
+    [projects]
   )
 
   const handleMove = async (next: string | null) => {
@@ -119,13 +124,13 @@ export function CalculationItem({
           </div>
 
           <div className="flex items-center gap-1">
-            {categorySlug ? (
+            {tool ? (
               <Button
                 variant="ghost"
                 size="icon-sm"
                 render={
                   <Link
-                    href={`/herramientas/${categorySlug}/${calculation.tool_id}?edit=${calculation.id}`}
+                    href={`/herramientas/${calculation.tool_id}?edit=${calculation.id}`}
                     aria-label={`Editar ${calculation.title}`}
                   />
                 }
@@ -161,10 +166,13 @@ export function CalculationItem({
                   <DialogTitle>Eliminar cálculo</DialogTitle>
                   <DialogDescription>
                     ¿Estás seguro de que quieres eliminar{" "}
-                    <strong>{calculation.title}</strong>? Esta acción no se puede deshacer.
+                    <strong>{calculation.title}</strong>? Esta acción no se
+                    puede deshacer.
                   </DialogDescription>
                 </DialogHeader>
-                {deleteError && <p className="text-sm text-destructive">{deleteError}</p>}
+                {deleteError && (
+                  <p className="text-sm text-destructive">{deleteError}</p>
+                )}
                 <DialogFooter>
                   <Button
                     variant="outline"

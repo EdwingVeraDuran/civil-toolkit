@@ -35,9 +35,10 @@ Aplicación Next.js 16 (App Router) + Supabase para herramientas de ingeniería 
 - Cada herramienta vive en `lib/tools/<id>/`: `schema.ts` (Zod), `calculate.ts` (función pura), `definition.ts` (`ToolDefinition`) y un componente en `components/tools/`.
 - `ToolDefinition.toSnapshot` es obligatorio; `validate` se crea con `createValidator(schema)`; `hydrateInput` es opcional.
 - Registrar una herramienta nueva exige: añadir su `ToolInfo` a `TOOL_CATALOG` (`lib/tools/catalog.ts`), crear la definición, crear el componente y registrarlo a mano en `TOOL_COMPONENTS` de `components/tools/tool-renderer.tsx`. El campo `component` de `ToolDefinition` existe pero el renderer no lo usa.
-- La URL se arma con `ToolInfo.category`: `/herramientas/<categoria>/<toolId>`. Si la categoría de la ruta no coincide, la página devuelve 404.
+- Todas las herramientas se listan en `/herramientas` (secciones por categoría con anchors `#<slug>`); el detalle de cada herramienta es `/herramientas/<toolId>`. `ToolInfo.category` define la sección y el enlace "volver".
 - Los componentes de herramienta reciben `ToolComponentProps` (`initialInput`, `editMode`) y deben hidratar el estado con inicializadores de `useState`, no con `useEffect` (regla `react-hooks/set-state-in-effect`).
-- Edición: `/herramientas/<categoria>/<toolId>?edit=<calculationId>` carga el cálculo guardado y usa `UpdateCalculationButton` para actualizar el mismo registro. Toda herramienta nueva debe soportar este contrato para ser editable.
+- Edición: `/herramientas/<toolId>?edit=<calculationId>` carga el cálculo guardado y usa `UpdateCalculationButton` para actualizar el mismo registro. Toda herramienta nueva debe soportar este contrato para ser editable.
+- Favoritas y recientes se guardan en `localStorage` (`lib/tools/preferences.ts`) y se comparten vía `useToolPreferences`; no requieren cambios en Supabase.
 - Los formularios usan schemas Zod de `lib/schemas/`; los inputs numéricos de herramientas pasan por `parseNumericInput` (acepta coma decimal).
 
 ## UI

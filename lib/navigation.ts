@@ -39,19 +39,11 @@ export function getPageTitle(pathname: string): string {
   if (pathname.startsWith("/configuracion")) return "Configuración"
   if (pathname.startsWith("/perfil")) return "Mi Cuenta"
 
-  const toolMatch = pathname.match(/^\/herramientas\/[^/]+\/([^/]+)/)
+  const toolMatch = pathname.match(/^\/herramientas\/([^/]+)/)
   if (toolMatch) {
     const tool = getToolInfo(toolMatch[1])
     if (tool) {
       return tool.name
-    }
-  }
-
-  const categoryMatch = pathname.match(/^\/herramientas\/([^/]+)/)
-  if (categoryMatch) {
-    const category = getToolCategory(categoryMatch[1])
-    if (category) {
-      return category.label
     }
   }
 

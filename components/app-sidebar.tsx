@@ -21,7 +21,11 @@ import {
 } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +48,7 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -71,7 +76,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/" />}>
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <HardHat />
               </div>
               <span className="truncate font-semibold">Civil Toolkit</span>
@@ -116,24 +121,29 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <Collapsible defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
-                  <CollapsibleTrigger
-                    render={<SidebarMenuButton tooltip="Herramientas" />}
+                  <SidebarMenuButton
+                    render={<Link href="/herramientas" />}
+                    isActive={pathname.startsWith("/herramientas")}
+                    tooltip="Herramientas"
                   >
                     <Wrench />
                     <span>Herramientas</span>
-                    <ChevronRight className="ml-auto transition-transform group-data-open/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                  <CollapsibleTrigger
+                    render={
+                      <SidebarMenuAction aria-label="Mostrar categorías de herramientas" />
+                    }
+                  >
+                    <ChevronRight className="transition-transform group-data-open/collapsible:rotate-90" />
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {toolCategories.map((category) => {
-                        const href = `/herramientas/${category.slug}`
+                        const href = `/herramientas#${category.slug}`
                         const CategoryIcon = category.icon
                         return (
                           <SidebarMenuSubItem key={category.slug}>
-                            <SidebarMenuSubButton
-                              render={<Link href={href} />}
-                              isActive={pathname === href}
-                            >
+                            <SidebarMenuSubButton render={<Link href={href} />}>
                               <CategoryIcon />
                               <span>{category.label}</span>
                             </SidebarMenuSubButton>
@@ -168,7 +178,9 @@ export function AppSidebar() {
                   <AvatarFallback>{activeUser.initials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left leading-tight">
-                  <span className="truncate font-medium">{activeUser.name}</span>
+                  <span className="truncate font-medium">
+                    {activeUser.name}
+                  </span>
                   <span className="truncate text-xs">{activeUser.role}</span>
                 </div>
                 <Ellipsis />
@@ -193,7 +205,10 @@ export function AppSidebar() {
                       Tema
                     </DropdownMenuSubTrigger>
                     <DropdownMenuSubContent>
-                      <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+                      <DropdownMenuRadioGroup
+                        value={theme}
+                        onValueChange={setTheme}
+                      >
                         <DropdownMenuRadioItem value="light">
                           <Sun />
                           Claro

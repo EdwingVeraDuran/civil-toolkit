@@ -10,15 +10,14 @@ export default async function ToolPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ categoria: string; toolId: string }>
+  params: Promise<{ toolId: string }>
   searchParams: Promise<{ edit?: string }>
 }) {
-  const { categoria, toolId } = await params
+  const { toolId } = await params
   const { edit } = await searchParams
-  const category = getToolCategory(categoria)
   const tool = getToolInfo(toolId)
 
-  if (!category || !tool || tool.category !== categoria) {
+  if (!tool) {
     notFound()
   }
 
@@ -32,12 +31,18 @@ export default async function ToolPage({
     notFound()
   }
 
+  const category = getToolCategory(tool.category)
+
   return (
     <ToolShell
       info={tool}
       backLink={{
-        href: edit ? "/calculos" : `/herramientas/${categoria}`,
-        label: edit ? "Volver a cálculos" : `Volver a ${category.label}`,
+        href: edit ? "/calculos" : `/herramientas#${tool.category}`,
+        label: edit
+          ? "Volver a cálculos"
+          : category
+            ? `Volver a ${category.label}`
+            : "Volver a Herramientas",
       }}
       editMode={
         calculation

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation"
+import { ToolsExplorer } from "@/components/tools/tools-explorer"
 
 export default function ToolsPage() {
-  redirect("/herramientas/general")
+  return <ToolsExplorer />
 }
