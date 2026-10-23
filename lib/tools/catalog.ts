@@ -1,4 +1,4 @@
-import { Landmark, Ruler } from "lucide-react"
+import { Landmark, Ruler, TrendingUp } from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
 
 export const unitConverterInfo: ToolInfo = {
@@ -20,7 +20,21 @@ export const beamSizingInfo: ToolInfo = {
   reference: "NSR-10, Título C — Concreto estructural",
 }
 
-export const TOOL_CATALOG: ToolInfo[] = [unitConverterInfo, beamSizingInfo]
+export const slopeCalculatorInfo: ToolInfo = {
+  id: "slope-calculator",
+  name: "Calculadora de pendientes",
+  description:
+    "Calcula pendientes, desniveles, ángulos y longitudes inclinadas a partir de desniveles, pendientes o dos cotas.",
+  category: "general",
+  icon: TrendingUp,
+  reference: "Geometría básica — sin verificación normativa",
+}
+
+export const TOOL_CATALOG: ToolInfo[] = [
+  unitConverterInfo,
+  slopeCalculatorInfo,
+  beamSizingInfo,
+]
 
 export function getToolInfo(id: string): ToolInfo | undefined {
   return TOOL_CATALOG.find((tool) => tool.id === id)

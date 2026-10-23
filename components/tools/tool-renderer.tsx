@@ -3,11 +3,13 @@
 import type { ComponentType } from "react"
 
 import { BeamSizing } from "@/components/tools/beam-sizing"
+import { SlopeCalculator } from "@/components/tools/slope-calculator"
 import { UnitConverter } from "@/components/tools/unit-converter"
 import type { EditMode, ToolComponentProps } from "@/lib/tools/types"
 
 const TOOL_COMPONENTS: Record<string, ComponentType<ToolComponentProps>> = {
   "unit-converter": UnitConverter,
+  "slope-calculator": SlopeCalculator,
   "beam-sizing": BeamSizing,
 }
 
