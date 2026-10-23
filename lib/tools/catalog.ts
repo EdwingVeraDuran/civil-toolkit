@@ -2,6 +2,7 @@ import {
   ChartSpline,
   Compass,
   Landmark,
+  LandPlot,
   Ruler,
   Scale,
   Shapes,
@@ -68,6 +69,16 @@ export const bearingAzimuthInfo: ToolInfo = {
   reference: "Topografía — orientaciones y ángulos de línea",
 }
 
+export const coordinatesAreaInfo: ToolInfo = {
+  id: "coordinates-area",
+  name: "Cálculo de áreas por coordenadas (Gauss/Shoelace)",
+  description:
+    "Obtiene el área de un polígono a partir de las coordenadas de sus vértices, ideal para lotes y predios.",
+  category: "topografia",
+  icon: LandPlot,
+  reference: "Topografía — fórmula de Gauss (Shoelace)",
+}
+
 export const slopeCalculatorInfo: ToolInfo = {
   id: "slope-calculator",
   name: "Calculadora de pendientes",
@@ -86,6 +97,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   beamSizingInfo,
   soilPhaseRelationshipsInfo,
   bearingAzimuthInfo,
+  coordinatesAreaInfo,
 ]
 
 export function getToolInfo(id: string): ToolInfo | undefined {
