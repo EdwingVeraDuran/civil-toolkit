@@ -13,7 +13,7 @@ type CreateCalculationInput = {
 }
 
 export async function createCalculation(
-  input: CreateCalculationInput,
+  input: CreateCalculationInput
 ): Promise<{ calculation?: Calculation; error?: string }> {
   const supabase = createClient()
   const { data: userData } = await supabase.auth.getUser()
@@ -45,13 +45,13 @@ export async function createCalculation(
 
 export async function updateCalculationProject(
   id: string,
-  projectId: string | null,
+  projectId: string | null
 ): Promise<{ error?: string }> {
   const supabase = createClient()
 
   const { error } = await supabase
     .from("calculations")
-    .update({ project_id: projectId, updated_at: new Date().toISOString() })
+    .update({ project_id: projectId })
     .eq("id", id)
 
   if (error) {
@@ -69,7 +69,7 @@ export async function updateCalculationFull(
     inputs: JsonObject
     result: JsonObject
     project_id: string | null
-  },
+  }
 ): Promise<{ error?: string }> {
   const supabase = createClient()
 
@@ -81,7 +81,6 @@ export async function updateCalculationFull(
       inputs: input.inputs,
       result: input.result,
       project_id: input.project_id,
-      updated_at: new Date().toISOString(),
     })
     .eq("id", id)
 
@@ -91,7 +90,9 @@ export async function updateCalculationFull(
 
   return {}
 }
-export async function deleteCalculation(id: string): Promise<{ error?: string }> {
+export async function deleteCalculation(
+  id: string
+): Promise<{ error?: string }> {
   const supabase = createClient()
 
   const { error } = await supabase.from("calculations").delete().eq("id", id)
