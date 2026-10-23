@@ -3,6 +3,7 @@ import {
   Combine,
   Compass,
   FlaskConical,
+  Gauge,
   HandCoins,
   Landmark,
   LandPlot,
@@ -147,12 +148,24 @@ export const openChannelFlowInfo: ToolInfo = {
     "Manning (SI) — flujo uniforme; número de Froude — régimen de flujo; geometría hidráulica de secciones. Referencia: Chow, Open-Channel Hydraulics",
 }
 
+export const pipeHydraulicsInfo: ToolInfo = {
+  id: "pipe-hydraulics",
+  name: "Diseño hidráulico de tuberías (Hazen-Williams, Darcy-Weisbach)",
+  description:
+    "Calcula diámetro, caudal o pérdida de carga en tuberías a presión, incluyendo pérdidas locales por accesorios. Pérdidas por fricción y accesorios.",
+  category: "aguas",
+  icon: Gauge,
+  reference:
+    "Hazen-Williams (SI) y Darcy-Weisbach con Colebrook-White; pérdidas locales h_m = ΣK·V²/(2g). Coeficientes K orientativos: Crane TP-410",
+}
+
 export const TOOL_CATALOG: ToolInfo[] = [
   unitConverterInfo,
   areaCalculatorInfo,
   slopeCalculatorInfo,
   interpolationCalculatorInfo,
   openChannelFlowInfo,
+  pipeHydraulicsInfo,
   beamSizingInfo,
   loadCombinationsInfo,
   rebarScheduleInfo,

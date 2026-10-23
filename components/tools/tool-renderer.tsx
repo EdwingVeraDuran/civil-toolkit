@@ -11,6 +11,7 @@ import { CoordinatesArea } from "@/components/tools/coordinates-area"
 import { InterpolationCalculator } from "@/components/tools/interpolation-calculator"
 import { LoadCombinations } from "@/components/tools/load-combinations"
 import { OpenChannelFlow } from "@/components/tools/open-channel-flow"
+import { PipeHydraulics } from "@/components/tools/pipe-hydraulics"
 import { RebarSchedule } from "@/components/tools/rebar-schedule"
 import { SlopeCalculator } from "@/components/tools/slope-calculator"
 import { SoilPhaseRelationships } from "@/components/tools/soil-phase-relationships"
@@ -25,6 +26,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType<ToolComponentProps>> = {
   "beam-sizing": BeamSizing,
   "load-combinations": LoadCombinations,
   "open-channel-flow": OpenChannelFlow,
+  "pipe-hydraulics": PipeHydraulics,
   "rebar-schedule": RebarSchedule,
   "soil-phase-relationships": SoilPhaseRelationships,
   "atterberg-limits": AtterbergLimits,
