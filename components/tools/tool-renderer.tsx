@@ -4,6 +4,7 @@ import type { ComponentType } from "react"
 
 import { AreaCalculator } from "@/components/tools/area-calculator"
 import { BeamSizing } from "@/components/tools/beam-sizing"
+import { BearingAzimuth } from "@/components/tools/bearing-azimuth"
 import { InterpolationCalculator } from "@/components/tools/interpolation-calculator"
 import { SlopeCalculator } from "@/components/tools/slope-calculator"
 import { SoilPhaseRelationships } from "@/components/tools/soil-phase-relationships"
@@ -17,6 +18,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType<ToolComponentProps>> = {
   "interpolation-calculator": InterpolationCalculator,
   "beam-sizing": BeamSizing,
   "soil-phase-relationships": SoilPhaseRelationships,
+  "bearing-azimuth": BearingAzimuth,
 }
 
 export function ToolRenderer({

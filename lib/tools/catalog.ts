@@ -1,5 +1,6 @@
 import {
   ChartSpline,
+  Compass,
   Landmark,
   Ruler,
   Scale,
@@ -57,6 +58,16 @@ export const soilPhaseRelationshipsInfo: ToolInfo = {
   reference: "Mecánica de suelos — relaciones fundamentales de fase",
 }
 
+export const bearingAzimuthInfo: ToolInfo = {
+  id: "bearing-azimuth",
+  name: "Conversión de rumbos y azimuts",
+  description:
+    "Pasa la orientación de una línea de rumbo a azimut y viceversa, y entre formatos de grados decimales y sexagesimales.",
+  category: "topografia",
+  icon: Compass,
+  reference: "Topografía — orientaciones y ángulos de línea",
+}
+
 export const slopeCalculatorInfo: ToolInfo = {
   id: "slope-calculator",
   name: "Calculadora de pendientes",
@@ -74,6 +85,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   interpolationCalculatorInfo,
   beamSizingInfo,
   soilPhaseRelationshipsInfo,
+  bearingAzimuthInfo,
 ]
 
 export function getToolInfo(id: string): ToolInfo | undefined {
