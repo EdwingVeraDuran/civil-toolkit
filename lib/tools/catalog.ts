@@ -11,6 +11,7 @@ import {
   Shapes,
   TableProperties,
   TrendingUp,
+  Waves,
 } from "lucide-react"
 import type { ToolInfo } from "@/lib/tools/types"
 
@@ -135,11 +136,23 @@ export const slopeCalculatorInfo: ToolInfo = {
   reference: "Geometría básica — sin verificación normativa",
 }
 
+export const openChannelFlowInfo: ToolInfo = {
+  id: "open-channel-flow",
+  name: "Canales abiertos (Manning, flujo normal, profundidad crítica)",
+  description:
+    "Calcula caudal, profundidad y velocidad en canales de distintas secciones, y verifica el régimen de flujo. Fórmulas con iteración simple.",
+  category: "aguas",
+  icon: Waves,
+  reference:
+    "Manning (SI) — flujo uniforme; número de Froude — régimen de flujo; geometría hidráulica de secciones. Referencia: Chow, Open-Channel Hydraulics",
+}
+
 export const TOOL_CATALOG: ToolInfo[] = [
   unitConverterInfo,
   areaCalculatorInfo,
   slopeCalculatorInfo,
   interpolationCalculatorInfo,
+  openChannelFlowInfo,
   beamSizingInfo,
   loadCombinationsInfo,
   rebarScheduleInfo,
