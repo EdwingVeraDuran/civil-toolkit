@@ -2,6 +2,7 @@ import {
   ChartSpline,
   Combine,
   Compass,
+  HandCoins,
   Landmark,
   LandPlot,
   Ruler,
@@ -101,6 +102,17 @@ export const coordinatesAreaInfo: ToolInfo = {
   reference: "Topografía — fórmula de Gauss (Shoelace)",
 }
 
+export const aiuLaborCostInfo: ToolInfo = {
+  id: "aiu-labor-cost",
+  name: "Calculadora de AIU y prestaciones sociales",
+  description:
+    "Calcula administración, imprevistos y utilidad de un presupuesto, y el costo real de un trabajador con sus prestaciones. Porcentajes sobre costos.",
+  category: "administrativas",
+  icon: HandCoins,
+  reference:
+    "AIU: Ley 80 de 1993 y Decreto 1082 de 2015; prestaciones: CST, Ley 100 de 1993 y Ley 21 de 1982",
+}
+
 export const slopeCalculatorInfo: ToolInfo = {
   id: "slope-calculator",
   name: "Calculadora de pendientes",
@@ -122,6 +134,7 @@ export const TOOL_CATALOG: ToolInfo[] = [
   soilPhaseRelationshipsInfo,
   bearingAzimuthInfo,
   coordinatesAreaInfo,
+  aiuLaborCostInfo,
 ]
 
 export function getToolInfo(id: string): ToolInfo | undefined {
