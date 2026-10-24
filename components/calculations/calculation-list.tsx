@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
 import { FolderKanban } from "lucide-react"
 
 import { CalculationItem } from "@/components/calculations/calculation-item"
@@ -29,7 +28,6 @@ export function CalculationList({
   projects,
   showFilter = false,
 }: CalculationListProps) {
-  const router = useRouter()
   const [projectFilter, setProjectFilter] = useState<string>(ALL)
 
   const filterItems = useMemo(
@@ -44,6 +42,11 @@ export function CalculationList({
     [projects]
   )
 
+  const projectNames = useMemo(
+    () => new Map(projects.map((project) => [project.id, project.name])),
+    [projects]
+  )
+
   const filteredCalculations = useMemo(() => {
     if (!showFilter || projectFilter === ALL) return calculations
     if (projectFilter === NO_PROJECT) {
@@ -55,10 +58,6 @@ export function CalculationList({
       (calculation) => calculation.project_id === projectFilter
     )
   }, [calculations, projectFilter, showFilter])
-
-  const handleChanged = () => {
-    router.refresh()
-  }
 
   if (calculations.length === 0) {
     return (
@@ -109,8 +108,12 @@ export function CalculationList({
             <CalculationItem
               key={calculation.id}
               calculation={calculation}
-              projects={projects}
-              onChanged={handleChanged}
+              projectName={
+                calculation.project_id
+                  ? (projectNames.get(calculation.project_id) ??
+                    "Proyecto no disponible")
+                  : NO_PROJECT_LABEL
+              }
             />
           ))}
         </div>

@@ -43,28 +43,6 @@ export async function createCalculation(
   return { calculation: data }
 }
 
-export async function getCalculation(
-  id: string
-): Promise<{ calculation?: Calculation; error?: string }> {
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .from("calculations")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle()
-
-  if (error) {
-    return { error: error.message }
-  }
-
-  if (!data) {
-    return { error: "No se encontró el cálculo o no tienes permiso para verlo" }
-  }
-
-  return { calculation: data }
-}
-
 export async function updateCalculationProject(
   id: string,
   projectId: string | null

@@ -1,6 +1,5 @@
 import { TriangleAlert } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import {
   Table,
   TableBody,
@@ -20,44 +19,23 @@ import {
   isReportRecord,
   type ReportEntry,
 } from "@/lib/calculations/report"
-import { DATE_LONG_OPTIONS, formatDate } from "@/lib/format/date"
 import { getToolInfo } from "@/lib/tools/catalog"
 import type { Calculation } from "@/lib/types/calculation"
 import { cn } from "@/lib/utils"
 
 type CalculationReportProps = {
   calculation: Calculation
-  projectName: string
 }
 
-export function CalculationReport({
-  calculation,
-  projectName,
-}: CalculationReportProps) {
+export function CalculationReport({ calculation }: CalculationReportProps) {
   const tool = getToolInfo(calculation.tool_id)
-  const toolName = tool?.name ?? calculation.tool_id
   const inputEntries = buildReportEntries(calculation.inputs)
   const resultEntries = buildReportEntries(calculation.result, ["warnings"])
   const warnings = getReportWarnings(calculation.result)
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="secondary">{toolName}</Badge>
-        <Badge variant="outline">Solo lectura</Badge>
-      </div>
-
-      <div className="grid gap-3 rounded-lg border bg-muted/20 p-3 sm:grid-cols-3">
-        <ReportMeta label="Proyecto" value={projectName} />
-        <ReportMeta
-          label="Creado"
-          value={formatDate(calculation.created_at, DATE_LONG_OPTIONS)}
-        />
-        <ReportMeta
-          label="Actualizado"
-          value={formatDate(calculation.updated_at, DATE_LONG_OPTIONS)}
-        />
-      </div>
+      <h2 className="sr-only">Reporte del cálculo</h2>
 
       {calculation.summary && (
         <section className="flex flex-col gap-1">
@@ -89,15 +67,6 @@ export function CalculationReport({
         entries={resultEntries}
         empty="Este cálculo no tiene resultados guardados."
       />
-    </div>
-  )
-}
-
-function ReportMeta({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-muted-foreground">{label}</span>
-      <span className="text-sm">{value}</span>
     </div>
   )
 }
