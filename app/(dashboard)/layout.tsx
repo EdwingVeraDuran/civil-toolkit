@@ -14,7 +14,9 @@ export default function DashboardLayout({
         <AppSidebar />
         <SidebarInset>
           <DashboardHeader />
-          <main className="flex flex-1 flex-col p-4 md:p-6">{children}</main>
+          <main className="flex flex-1 flex-col p-4 md:p-6 print:p-0">
+            {children}
+          </main>
         </SidebarInset>
       </SidebarProvider>
     </AuthGuard>

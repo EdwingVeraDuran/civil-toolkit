@@ -61,6 +61,24 @@ export async function updateCalculationProject(
   return {}
 }
 
+export async function updateCalculationTitle(
+  id: string,
+  title: string
+): Promise<{ error?: string }> {
+  const supabase = createClient()
+
+  const { error } = await supabase
+    .from("calculations")
+    .update({ title })
+    .eq("id", id)
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return {}
+}
+
 export async function updateCalculationFull(
   id: string,
   input: {

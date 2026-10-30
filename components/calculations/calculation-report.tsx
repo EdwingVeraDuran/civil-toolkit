@@ -1,5 +1,6 @@
 import { TriangleAlert } from "lucide-react"
 
+import { renderToolReport } from "@/components/calculations/tool-report"
 import {
   Table,
   TableBody,
@@ -38,7 +39,7 @@ export function CalculationReport({ calculation }: CalculationReportProps) {
       <h2 className="sr-only">Reporte del cálculo</h2>
 
       {calculation.summary && (
-        <section className="flex flex-col gap-1">
+        <section className="print-avoid-break flex flex-col gap-1">
           <h3 className="text-sm font-medium">Resumen</h3>
           <p className="text-sm whitespace-pre-wrap text-muted-foreground">
             {calculation.summary}
@@ -46,10 +47,12 @@ export function CalculationReport({ calculation }: CalculationReportProps) {
         </section>
       )}
 
+      {renderToolReport(calculation)}
+
       {warnings.length > 0 && <ReportWarnings warnings={warnings} />}
 
       {tool?.reference && (
-        <section className="rounded-lg border bg-muted/20 p-3">
+        <section className="print-avoid-break rounded-lg border bg-muted/20 p-3">
           <h3 className="text-xs font-medium text-muted-foreground">
             Referencia normativa
           </h3>
@@ -73,7 +76,7 @@ export function CalculationReport({ calculation }: CalculationReportProps) {
 
 function ReportWarnings({ warnings }: { warnings: string[] }) {
   return (
-    <section className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+    <section className="print-avoid-break rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
       <h3 className="flex items-center gap-2 text-sm font-medium text-amber-700 dark:text-amber-400">
         <TriangleAlert className="size-4" />
         Advertencias

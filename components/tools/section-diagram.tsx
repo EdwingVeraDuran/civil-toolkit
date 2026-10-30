@@ -11,7 +11,11 @@ const AREA_Y = 32
 const AREA_WIDTH = 200
 const AREA_HEIGHT = 160
 
-export function SectionDiagram({ width, height, className }: SectionDiagramProps) {
+export function SectionDiagram({
+  width,
+  height,
+  className,
+}: SectionDiagramProps) {
   const scale = Math.min(AREA_WIDTH / width, AREA_HEIGHT / height)
   const rectWidth = width * scale
   const rectHeight = height * scale
@@ -20,6 +24,7 @@ export function SectionDiagram({ width, height, className }: SectionDiagramProps
 
   const bDimY = rectY + rectHeight + 26
   const hDimX = rectX + rectWidth + 26
+  const hLabelX = hDimX + 12
 
   return (
     <svg
@@ -41,7 +46,12 @@ export function SectionDiagram({ width, height, className }: SectionDiagramProps
       <g className="stroke-muted-foreground" strokeWidth={1}>
         <line x1={rectX} y1={bDimY} x2={rectX + rectWidth} y2={bDimY} />
         <line x1={rectX} y1={bDimY - 5} x2={rectX} y2={bDimY + 5} />
-        <line x1={rectX + rectWidth} y1={bDimY - 5} x2={rectX + rectWidth} y2={bDimY + 5} />
+        <line
+          x1={rectX + rectWidth}
+          y1={bDimY - 5}
+          x2={rectX + rectWidth}
+          y2={bDimY + 5}
+        />
       </g>
       <text
         x={rectX + rectWidth / 2}
@@ -55,15 +65,20 @@ export function SectionDiagram({ width, height, className }: SectionDiagramProps
       <g className="stroke-muted-foreground" strokeWidth={1}>
         <line x1={hDimX} y1={rectY} x2={hDimX} y2={rectY + rectHeight} />
         <line x1={hDimX - 5} y1={rectY} x2={hDimX + 5} y2={rectY} />
-        <line x1={hDimX - 5} y1={rectY + rectHeight} x2={hDimX + 5} y2={rectY + rectHeight} />
+        <line
+          x1={hDimX - 5}
+          y1={rectY + rectHeight}
+          x2={hDimX + 5}
+          y2={rectY + rectHeight}
+        />
       </g>
       <text
-        x={hDimX}
+        x={hLabelX}
         y={rectY + rectHeight / 2}
         textAnchor="middle"
         dominantBaseline="middle"
         className="fill-muted-foreground text-[12px]"
-        transform={`rotate(-90 ${hDimX} ${rectY + rectHeight / 2})`}
+        transform={`rotate(-90 ${hLabelX} ${rectY + rectHeight / 2})`}
       >
         h = {height} mm
       </text>

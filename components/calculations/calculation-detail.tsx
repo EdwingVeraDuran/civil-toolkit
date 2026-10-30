@@ -3,7 +3,9 @@ import { ArrowLeft, CalendarDays, FolderKanban, Pencil } from "lucide-react"
 
 import { CalculationDeleteDialog } from "@/components/calculations/calculation-delete-dialog"
 import { CalculationProjectSelect } from "@/components/calculations/calculation-project-select"
+import { CalculationRenameDialog } from "@/components/calculations/calculation-rename-dialog"
 import { CalculationReport } from "@/components/calculations/calculation-report"
+import { ExportPdfButton } from "@/components/calculations/export-pdf-button"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -24,13 +26,16 @@ export function CalculationDetail({
 }: CalculationDetailProps) {
   const tool = getToolInfo(calculation.tool_id)
   const toolName = tool?.name ?? calculation.tool_id
+  const project = calculation.project_id
+    ? projects.find((item) => item.id === calculation.project_id)
+    : undefined
 
   return (
     <div className="flex flex-1 flex-col gap-6">
       <div className="flex flex-col gap-4">
         <Link
           href="/calculos"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground print:hidden"
         >
           <ArrowLeft className="size-4" />
           Volver a cálculos
@@ -41,6 +46,13 @@ export function CalculationDetail({
             <h1 className="text-2xl font-bold">{calculation.title}</h1>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary">{toolName}</Badge>
+              <Badge
+                variant="outline"
+                className="h-auto max-w-full gap-1.5 py-1 text-left whitespace-normal"
+              >
+                <FolderKanban className="size-3.5 shrink-0" />
+                {project ? project.name : "Sin proyecto"}
+              </Badge>
             </div>
             <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
               <CalendarDays className="size-4" />
@@ -56,7 +68,12 @@ export function CalculationDetail({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 print:hidden">
+            <ExportPdfButton />
+            <CalculationRenameDialog
+              calculationId={calculation.id}
+              initialTitle={calculation.title}
+            />
             {tool ? (
               <Link
                 href={`/herramientas/${calculation.tool_id}?edit=${calculation.id}`}
@@ -86,7 +103,7 @@ export function CalculationDetail({
         </div>
       </div>
 
-      <Card className="gap-0 py-0">
+      <Card className="gap-0 py-0 print:hidden">
         <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-1">
             <p className="flex items-center gap-2 text-sm font-medium">
@@ -105,7 +122,7 @@ export function CalculationDetail({
         </div>
       </Card>
 
-      <Card>
+      <Card className="print:border-0 print:shadow-none">
         <CardContent>
           <CalculationReport calculation={calculation} />
         </CardContent>

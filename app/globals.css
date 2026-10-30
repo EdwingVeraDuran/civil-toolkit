@@ -130,3 +130,133 @@
     @apply font-sans;
     }
 }
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+
+  :root,
+  .dark {
+    color-scheme: light;
+    --background: #fff;
+    --foreground: #111827;
+    --card: #fff;
+    --card-foreground: #111827;
+    --popover: #fff;
+    --popover-foreground: #111827;
+    --primary: #1d4ed8;
+    --primary-foreground: #fff;
+    --secondary: #f3f4f6;
+    --secondary-foreground: #111827;
+    --muted: #f3f4f6;
+    --muted-foreground: #4b5563;
+    --accent: #f3f4f6;
+    --accent-foreground: #111827;
+    --destructive: #b91c1c;
+    --border: #d1d5db;
+    --input: #d1d5db;
+    --ring: #6b7280;
+    --chart-1: #2563eb;
+    --chart-2: #0d9488;
+    --chart-3: #d97706;
+    --chart-4: #7c3aed;
+    --chart-5: #db2777;
+    --sidebar: #fff;
+    --sidebar-foreground: #111827;
+    --sidebar-border: #d1d5db;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111827 !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  [data-slot="dashboard-header"],
+  [data-slot="sidebar"],
+  [data-slot="sidebar-gap"],
+  [data-slot="sidebar-container"],
+  [data-slot="sidebar-inner"],
+  [data-slot="sidebar-rail"],
+  [data-slot="sidebar-trigger"],
+  .print-hidden {
+    display: none !important;
+  }
+
+  [data-slot="sidebar-wrapper"] {
+    display: block !important;
+    min-height: 0 !important;
+    background: #fff !important;
+  }
+
+  [data-slot="sidebar-inset"] {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  [data-slot="card"] {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  [data-slot="card-content"] {
+    padding: 0 !important;
+  }
+
+  [data-slot="table-container"] {
+    overflow: visible !important;
+  }
+
+  [data-slot="table"] {
+    width: 100% !important;
+    table-layout: auto;
+    font-size: 8.5pt;
+  }
+
+  [data-slot="table-head"],
+  [data-slot="table-cell"] {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  [data-slot="table-head"] {
+    height: auto !important;
+  }
+
+  tr,
+  figure,
+  svg,
+  .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  a[href]::after {
+    content: none !important;
+  }
+
+  .dark [data-slot="card"] {
+    background: #fff !important;
+    color: #111827 !important;
+  }
+}
